@@ -10,6 +10,8 @@ on:
 
 jobs:
   build-and-publish:
+    # Add a condition to skip commits containing [skip ci]
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -36,6 +38,14 @@ jobs:
           # Update release notes
           commit_message=$(git log -1 --pretty=%B)
           sed -i "s|<PackageReleaseNotes>.*</PackageReleaseNotes>|<PackageReleaseNotes>$commit_message</PackageReleaseNotes>|" src/Markdown.Blog/Markdown.Blog.csproj
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add src/Markdown.Blog/Markdown.Blog.csproj
+          git commit -m "Update version and release notes [skip ci]"
+          git push
 
       - name: Build
         run: dotnet build --configuration Release --no-restore
