@@ -6,6 +6,12 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<Deterministic>true</Deterministic>
+		<ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>Markdown.Blog</Title>
 		<VersionPrefix>0</VersionPrefix>
@@ -24,6 +30,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
 		<None Include="Resources\logo_128x128.png" Pack="true" PackagePath="\" />
 		<None Update="Resources\readme.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
