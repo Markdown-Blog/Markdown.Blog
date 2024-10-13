@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>Markdown.Blog</Title>
+		<VersionPrefix>0</VersionPrefix>
+		<Version>$(VersionPrefix).0.1</Version>
+		<Authors>zhiliang</Authors>
+		<Company />
+		<Description>Markdown.Blog: A convenient and flexible .NET-based reusable component for generating blogs using Markdown.</Description>
+		<Copyright>Copyright 2022-2121 Zhi Liang</Copyright>
+		<PackageProjectUrl>https://markdown.blog</PackageProjectUrl>
+		<PackageIcon>logo_128x128.png</PackageIcon>
+		<RepositoryUrl>https://github.com/Markdown-Blog</RepositoryUrl>
+		<PackageTags>.net;standard;markdown;blog</PackageTags>
+		<PackageReleaseNotes>Initial version.</PackageReleaseNotes>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="Resources\logo_128x128.png" Pack="true" PackagePath="\"/>
+		<None Update="readme.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
+
+</Project>

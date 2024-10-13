@@ -1,0 +1,50 @@
+name: NuGet Package Publish
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/Markdown.Blog/**'
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: src/Markdown.Blog
+
+      - name: Update version and release notes
+        run: |
+          # Get the current version
+          current_version=$(grep -oP '(?<=<Version>\$\(VersionPrefix\)\.0\.)\d+(?=</Version>)' src/Markdown.Blog/Markdown.Blog.csproj)
+          new_version=$((current_version + 1))
+
+          # Update version
+          sed -i "s/<Version>\$(VersionPrefix)\.0\.$current_version<\/Version>/<Version>\$(VersionPrefix).0.$new_version<\/Version>/" src/Markdown.Blog/Markdown.Blog.csproj
+
+          # Update release notes
+          commit_message=$(git log -1 --pretty=%B)
+          sed -i "s|<PackageReleaseNotes>.*</PackageReleaseNotes>|<PackageReleaseNotes>$commit_message</PackageReleaseNotes>|" src/Markdown.Blog/Markdown.Blog.csproj
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+        working-directory: src/Markdown.Blog
+
+      - name: Pack
+        run: dotnet pack --configuration Release --no-build --output .
+        working-directory: src/Markdown.Blog
+
+      - name: Publish to NuGet
+        run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        working-directory: src/Markdown.Blog
