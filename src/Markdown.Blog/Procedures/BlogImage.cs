@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Markdown.Blog.Procedures
 {
@@ -86,5 +87,80 @@ namespace Markdown.Blog.Procedures
 			}
 		}
 
+
+		/// <summary>
+		/// Parses all blog image references from Markdown content.
+		/// Looks for image references in the format: ![alt](./assets/{assetId}/{imageFileName} "title")
+		/// </summary>
+		/// <param name="mdFilePath">Path to the Markdown file being processed</param>
+		/// <param name="markdownContent">Raw Markdown content to parse</param>
+		/// <returns>List of BlogImage objects representing all valid image references found in the content</returns>
+		/// <remarks>
+		/// The method:
+		/// 1. Uses regex to find all image references matching the pattern
+		/// 2. Extracts alt text, asset ID, filename, and optional title
+		/// 3. Creates BlogImage objects for valid references
+		/// 4. Silently skips invalid references (e.g., missing required parameters)
+		/// </remarks>
+		/// <example>
+		/// Valid image reference formats:
+		/// ![Alt text](./assets/123456/image.png)
+		/// ![Alt text](./assets/123456/image.jpg "Optional title")
+		/// </example>
+		public static List<Markdown.Blog.BlogImage> ParseBlogImagesFromMarkdown(string mdFilePath, string markdownContent)
+		{
+			var blogImages = new List<Markdown.Blog.BlogImage>();
+
+			// Regular expression pattern to match image references in format:
+			// ![alt](./assets/{assetId}/{imageFileName} "title")
+			// Groups captured:
+			// 1: Alt text
+			// 2: Asset ID
+			// 3: Image filename
+			// 4: Optional title (if present)
+			var imagePattern = @"!\[(.*?)\]\(\.\/assets\/([^\/]+)\/([^\/\)\s]+)(?:\s+""([^""]*)"")?\)";
+			var matches = Regex.Matches(markdownContent, imagePattern);
+
+			foreach (Match match in matches)
+			{
+				// Ensure we have at least the required groups (alt, assetId, imageFileName)
+				if (match.Groups.Count >= 4)
+				{
+					// Extract components from the match
+					string alt = match.Groups[1].Value;
+					string assetId = match.Groups[2].Value;
+					string imageFileName = match.Groups[3].Value;
+					// Title is optional, use empty string if not present
+					string title = match.Groups.Count > 4 ? match.Groups[4].Value : "";
+
+					try
+					{
+						// Attempt to create and add a new BlogImage
+						// Constructor will validate the parameters
+						var blogImage = new Markdown.Blog.BlogImage(
+							mdFilePath,
+							assetId,
+							imageFileName,
+							title,
+							alt
+						);
+						blogImages.Add(blogImage);
+					}
+					catch (ArgumentException)
+					{
+						// Skip invalid image references
+						// This can happen if:
+						// - Asset ID is empty
+						// - Image filename has no extension
+						// - Markdown file path is invalid
+						continue;
+					}
+				}
+			}
+
+			return blogImages;
+		}
 	}
+
 }
+

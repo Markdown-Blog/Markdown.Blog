@@ -20,6 +20,10 @@ namespace Markdown.Blog
 		/// </summary>
 		public string ImageFileName { get; }
 
+		public string Title { get; set; }
+
+		public string AltText { get; set; }
+
 		/// <summary>
 		/// Creates a new instance of BlogImage
 		/// </summary>
@@ -31,7 +35,7 @@ namespace Markdown.Blog
 		/// assetId is empty, or
 		/// imageFileName has no extension
 		/// </exception>
-		public BlogImage(string mdFilePath, string assetId, string imageFileName)
+		public BlogImage(string mdFilePath, string assetId, string imageFileName, string title = null!, string altText = null!)
 		{
 			// Validate parameters
 			if (!mdFilePath.EndsWith(".md", StringComparison.OrdinalIgnoreCase))
@@ -47,6 +51,8 @@ namespace Markdown.Blog
 			MarkdownFilePath = mdFilePath;
 			AssetId = assetId;
 			ImageFileName = imageFileName;
+			Title = title;
+			AltText = altText;
 		}
 
 		/// <summary>
@@ -82,5 +88,6 @@ namespace Markdown.Blog
 		{
 			return Procedures.BlogImage.ConstructImagePath(MarkdownFilePath, AssetId, ImageFileName, ImagePathType.RelativeToMarkdown);
 		}
+
 	}
 }
