@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markdown.Blog", "Markdown.Blog\Markdown.Blog.csproj", "{328B1CEB-AB08-43B1-BF39-28F6EF97B07F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Markdown.Blog", "Markdown.Blog\Markdown.Blog.csproj", "{328B1CEB-AB08-43B1-BF39-28F6EF97B07F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
