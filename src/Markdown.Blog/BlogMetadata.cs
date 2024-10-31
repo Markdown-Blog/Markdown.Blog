@@ -42,5 +42,12 @@ namespace Markdown.Blog
 		/// Gets or sets the hierarchical structure of the blog post in the BlogMetadata object.
 		/// </summary>
 		public BlogHierarchy Hierarchy { get; set; }
+
+		/// <summary>
+		/// Gets or sets the path segments that represent the hierarchical location of the blog post.
+		/// For example: ["Documentation", "OutSystems 11", "Building apps", "Data management", "Data operations", "SQL Queries"]
+		/// If null, path-based access mode is disabled.
+		/// </summary>
+		public List<string> PathSegments { get; set; }
 	}
 }

@@ -87,6 +87,28 @@ namespace Markdown.Blog.Procedures
 			}
 		}
 
+		/*暂时取消以下逻辑
+		/// <summary>
+		/// Constructs the path for the cover image, fixed as path/to/markdown/file!md/assets/cover.jpg
+		/// </summary>
+		/// <param name="mdFilePath">Path to the Markdown file</param>
+		/// <returns>Path to the cover image</returns>
+		public static string ConstructCoverPath(string mdFilePath)
+		{
+			if (!mdFilePath.EndsWith(".md", StringComparison.OrdinalIgnoreCase))
+				throw new ArgumentException("File path must end with .md", nameof(mdFilePath));
+
+			// Get md file directory and name
+			string mdFileDirectory = Path.GetDirectoryName(mdFilePath) ?? string.Empty;
+			string mdFileName = Path.GetFileNameWithoutExtension(mdFilePath);
+
+			// Construct directory path with !md
+			string mdFilePathModified = Path.Combine(mdFileDirectory, mdFileName + "!md");
+
+			// Construct cover image path
+			return Path.Combine(mdFilePathModified, "assets", "cover.jpg");
+		}
+		*/
 
 		/// <summary>
 		/// Parses all blog image references from Markdown content.
