@@ -140,8 +140,9 @@ All metadata fields are extracted from the YAML front matter at the beginning of
 - Supports statistical analysis of content distribution
 
 ### Path Segments
-- Provides custom URL routing for posts
+- Provides custom navigation path for posts
 - Allows flexible organization independent of physical file structure
+- Used for displaying post location in navigation menus
 - Example:
   ```yaml
   pathSegments:
@@ -150,4 +151,4 @@ All metadata fields are extracted from the YAML front matter at the beginning of
     - Guides
     - Getting Started
   ```
-  Would generate URL like: `/documentation/platform/guides/getting-started`
+  Will be displayed in navigation as: Documentation > Platform > Guides > Getting Started
