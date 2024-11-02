@@ -11,8 +11,8 @@ The blog post should start with YAML front matter. There are two valid formats:
 title: My Post Title
 date: 2024-03-21
 tags:
-Tutorial
-Guide
+  - Tutorial
+  - Guide
 description: A brief description of the post
 ---
 
