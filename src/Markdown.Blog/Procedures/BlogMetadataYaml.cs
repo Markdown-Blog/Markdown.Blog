@@ -73,15 +73,20 @@ namespace Markdown.Blog.Procedures
 				// Set file path
 				result.FilePath = relativePath;
 
-				// Extract cover image URL if cover section exists
+				// Handle cover image with priority rules:
+				// 1. If cover section exists and contains an image, use that image URL
+				// 2. Otherwise, keep the coverImage value from YAML if it exists
 				if (!string.IsNullOrEmpty(coverSection))
 				{
 					var imageMatch = Regex.Match(coverSection.Trim(), @"!\[.*?\]\((.*?)\)");
 					if (imageMatch.Success)
 					{
+						// Override any existing coverImage from YAML
 						result.CoverImage = imageMatch.Groups[1].Value;
 					}
 				}
+				// Note: If no image in cover section and no coverImage in YAML,
+				// result.CoverImage will remain as initialized by YAML deserializer
 
 				// Extract hierarchy information from file path
 				var pathParts = relativePath.Split(Path.DirectorySeparatorChar);
