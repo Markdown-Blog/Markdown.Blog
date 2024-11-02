@@ -1,5 +1,21 @@
 # Markdown.Blog
 
+## Directory Structure Rules
+
+The blog content follows a hierarchical organization:
+
+1. First-level directories under the root are **Divisions**
+   - Each Division can be rendered independently or combined with others into a website
+   - Each Division maintains its own index
+
+2. The structure follows this pattern:
+   ```
+   Division/Category/SubCategory/Posts
+   ```
+   - Second level: Categories
+   - Third level: SubCategories
+   - Posts are placed under SubCategories
+
 ## YAML Front Matter Rules
 
 The blog post should start with YAML front matter. There are two valid formats:
@@ -83,5 +99,55 @@ tags:
 
 Content here...
 ```
+
+4. Post with All Available Fields:
+```yaml
+---
+title: Complete Guide to Our Platform
+date: 2024-03-21
+description: A comprehensive guide covering all aspects
+tags:
+  - Guide
+  - Tutorial
+  - Advanced
+coverImage: images/2024/guide-cover.jpg
+pathSegments:
+  - Documentation
+  - Platform
+  - Guides
+  - Getting Started
+---
+![cover](images/2024/actual-guide-cover.jpg)
+---
+
+Content here...
 ```
 
+## Metadata Fields Usage
+
+All metadata fields are extracted from the YAML front matter at the beginning of each markdown file. These fields are parsed into the `BlogMetadata` object for processing.
+
+### Hierarchy
+- Automatically generated from the physical file structure
+- Not specified in YAML front matter
+- Reflects the actual directory organization: `Division/Category/SubCategory`
+- Directory placement determines the blog post's hierarchical position
+
+### Tags
+- Used for categorizing posts by topics
+- Helps readers find related content
+- Enables topic-based navigation and content discovery
+- Supports statistical analysis of content distribution
+
+### Path Segments
+- Provides custom URL routing for posts
+- Allows flexible organization independent of physical file structure
+- Example:
+  ```yaml
+  pathSegments:
+    - Documentation
+    - Platform
+    - Guides
+    - Getting Started
+  ```
+  Would generate URL like: `/documentation/platform/guides/getting-started`
