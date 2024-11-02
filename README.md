@@ -6,7 +6,7 @@ The blog post should start with YAML front matter. There are two valid formats:
 
 ### 1. Simple Format (Basic metadata only)
 
-yaml
+```yaml
 ---
 title: My Post Title
 date: 2024-03-21
@@ -15,11 +15,13 @@ Tutorial
 Guide
 description: A brief description of the post
 ---
-Content starts here...
 
+Content starts here...
+```
 ### 2. Extended Format (With cover image)
 
-yaml
+```yaml
+
 ---
 title: My Post Title
 date: 2024-03-21
@@ -33,6 +35,7 @@ coverImage: images/original-cover.jpg    # Optional, will be overwritten if imag
 ---
 
 Content starts here...
+```
 
 ### Cover Image Priority Rules
 1. If an image exists between the second and third `---` markers, it will be used as the cover image
