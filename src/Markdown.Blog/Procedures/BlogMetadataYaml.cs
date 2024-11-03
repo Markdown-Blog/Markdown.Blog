@@ -79,6 +79,8 @@ namespace Markdown.Blog.Procedures
 				if (!string.IsNullOrEmpty(coverSection))
 				{
 					// Match all image references in the cover section
+					// Only matches lines with valid markdown image syntax (![...](...)format)
+					// Automatically ignores empty lines and non-image tag lines
 					var imageMatches = Regex.Matches(coverSection.Trim(), @"!\[.*?\]\((.*?)\)");
 					if (imageMatches.Count > 0)
 					{

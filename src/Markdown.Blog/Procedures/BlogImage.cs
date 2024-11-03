@@ -69,9 +69,11 @@ namespace Markdown.Blog.Procedures
 			// Get md file directory and name
 			string mdFileDirectory = Path.GetDirectoryName(mdFilePath) ?? string.Empty;
 			string mdFileName = Path.GetFileNameWithoutExtension(mdFilePath);
+			// filename ends with !md is named mdFileNameShadow
+			string mdFileNameShadow = mdFileName + "!md";
 
 			// Construct directory path with !md
-			string mdFilePathModified = Path.Combine(mdFileDirectory, mdFileName + "!md");
+			string mdFilePathModified = Path.Combine(mdFileDirectory, mdFileNameShadow);
 
 			// Construct assets path
 			string[] pathComponents = new[] { "assets", assetId, imageFileName };
@@ -79,7 +81,7 @@ namespace Markdown.Blog.Procedures
 			// Return different path format based on pathType
 			if (pathType == Markdown.Blog.BlogImage.ImagePathType.RelativeToMarkdown)
 			{
-				return Path.Combine(".", Path.Combine(pathComponents));
+				return Path.Combine(mdFileNameShadow, Path.Combine(pathComponents));
 			}
 			else // Absolute
 			{
