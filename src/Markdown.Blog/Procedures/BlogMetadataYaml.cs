@@ -78,15 +78,21 @@ namespace Markdown.Blog.Procedures
 				// 2. Otherwise, keep the coverImage value from YAML if it exists
 				if (!string.IsNullOrEmpty(coverSection))
 				{
-					var imageMatch = Regex.Match(coverSection.Trim(), @"!\[.*?\]\((.*?)\)");
-					if (imageMatch.Success)
+					// Match all image references in the cover section
+					var imageMatches = Regex.Matches(coverSection.Trim(), @"!\[.*?\]\((.*?)\)");
+					if (imageMatches.Count > 0)
 					{
-						// Override any existing coverImage from YAML
-						result.CoverImage = imageMatch.Groups[1].Value;
+						// Initialize the CoverImages list if null
+						result.CoverImages = result.CoverImages ?? new List<string>();
+
+						// Add all found image paths to the list
+						foreach (Match imageMatch in imageMatches)
+						{
+							result.CoverImages.Add(imageMatch.Groups[1].Value);
+						}
 					}
 				}
-				// Note: If no image in cover section and no coverImage in YAML,
-				// result.CoverImage will remain as initialized by YAML deserializer
+				// Note: If no images in cover section, CoverImages will remain as initialized by YAML deserializer
 
 				// Extract hierarchy information from file path
 				var pathParts = relativePath.Split(Path.DirectorySeparatorChar);

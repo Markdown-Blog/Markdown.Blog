@@ -34,9 +34,9 @@ namespace Markdown.Blog
 		public List<string> Tags { get; set; }
 
 		/// <summary>
-		/// Gets or sets the cover image path for the blog post in the BlogMetadata object.
+		/// Gets or sets the cover image paths for the blog post in the BlogMetadata object.
 		/// </summary>
-		public string CoverImage { get; set; }
+		public List<string> CoverImages { get; set; } = new List<string>();
 
 		/// <summary>
 		/// Gets or sets the hierarchical structure of the blog post in the BlogMetadata object.
@@ -49,5 +49,11 @@ namespace Markdown.Blog
 		/// If null, path-based access mode is disabled.
 		/// </summary>
 		public List<string> PathSegments { get; set; }
+
+		/// <summary>
+		/// Determines if the blog post is displayed in path mode.
+		/// </summary>
+		/// <returns>true if the blog post is displayed in path mode; otherwise, false.</returns>
+		public bool IsPathMode => PathSegments != null;
 	}
 }
