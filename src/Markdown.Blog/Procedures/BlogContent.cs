@@ -36,8 +36,8 @@ namespace Markdown.Blog.Procedures
 		/// </summary>
 		private static string ResolveImagePaths(string content, Division division, string mdFilePath)
 		{
-			// Base URL for GitHub raw content
-			string baseUrl = $"https://raw.githubusercontent.com/{division.GithubUsername}/{division.GithubRepository}/main";
+			// Base URL for GitHub raw content - updated to include refs/heads/
+			string baseUrl = $"https://raw.githubusercontent.com/{division.GithubUsername}/{division.GithubRepository}/refs/heads/main";
 
 			// Get the directory path of the markdown file
 			string mdDirectory = Path.GetDirectoryName(mdFilePath)?.Replace('\\', '/') ?? "";
