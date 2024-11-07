@@ -31,16 +31,59 @@ namespace Markdown.Blog.Procedures
         /// Downloads the index metadata binary file as a byte array.
         /// </summary>
         /// <param name="division">The division containing repository information.</param>
-        /// <returns>The content of the index metadata binary file as a byte array.</returns>
-        public static async Task<byte[]> GetIndexMetadataBinaryAsync(Division division)
+        /// <returns>Tuple of (byte[] content, DateTime lastModifiedUtc)</returns>
+        public static async Task<(byte[] content, DateTime lastModifiedUtc)> GetIndexMetadataBinaryAsync(Division division)
         {
             try
             {
-                return await _httpClient.GetByteArrayAsync(division.IndexMetadataBinaryUrl);
+                var request = new HttpRequestMessage(HttpMethod.Get, division.IndexMetadataBinaryUrl);
+                var response = await _httpClient.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                var content = await response.Content.ReadAsByteArrayAsync();
+                var lastModified = response.Content.Headers.LastModified?.UtcDateTime ?? DateTime.UtcNow;
+
+                return (content, lastModified);
             }
             catch (HttpRequestException ex)
             {
                 throw new InvalidOperationException($"Failed to download binary metadata from {division.IndexMetadataBinaryUrl}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Checks if the remote binary metadata file has been modified using HTTP HEAD request
+        /// </summary>
+        /// <param name="division">The division containing repository information</param>
+        /// <param name="lastModified">Last known modification time in UTC</param>
+        /// <returns>Tuple of (bool isModified, DateTime newLastModified). newLastModified is always in UTC</returns>
+        public static async Task<(bool isModified, DateTime newLastModified)> CheckIndexMetadataBinaryAsync(
+            Division division,
+            DateTime? lastModified = null)
+        {
+            // Ensure input DateTime is UTC
+            if (lastModified.HasValue && lastModified.Value.Kind != DateTimeKind.Utc)
+            {
+                throw new ArgumentException("lastModified must be in UTC", nameof(lastModified));
+            }
+
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Head, division.IndexMetadataBinaryUrl);
+
+                if (lastModified.HasValue)
+                {
+                    request.Headers.IfModifiedSince = lastModified.Value;
+                }
+
+                var response = await _httpClient.SendAsync(request);
+                var newLastModified = response.Content.Headers.LastModified?.UtcDateTime ?? DateTime.UtcNow;
+
+                return (response.StatusCode != System.Net.HttpStatusCode.NotModified, newLastModified);
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new InvalidOperationException($"Failed to check binary metadata status from {division.IndexMetadataBinaryUrl}", ex);
             }
         }
         #endregion
