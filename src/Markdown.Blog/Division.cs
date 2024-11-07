@@ -42,12 +42,26 @@ namespace Markdown.Blog
 		}
 
 		/// <summary>
-		/// Downloads the index metadata binary file as a byte array.
+		/// Downloads the index metadata binary file as a byte array and returns its last modified time.
 		/// </summary>
-		/// <returns>The content of the index metadata binary file as a byte array.</returns>
-		public async Task<byte[]> GetIndexMetadataBinaryAsync()
+		/// <returns>
+		/// A tuple containing:
+		/// - content: The content of the index metadata binary file
+		/// - lastModified: The last modified time (UTC) of the file from server
+		/// </returns>
+		/// <exception cref="InvalidOperationException">Thrown when the download fails</exception>
+		public async Task<(byte[] content, DateTime lastModified)> GetIndexMetadataBinaryAsync()
 		{
 			return await BlogRawContent.GetIndexMetadataBinaryAsync(this);
+		}
+
+		/// Checks if the index metadata binary file has been modified since the last known modification time.
+		/// </summary>
+		/// <param name="lastModified">Last known modification time in UTC</param>
+		/// <returns>Tuple of (bool isModified, DateTime newLastModified). newLastModified is always in UTC</returns>
+		public async Task<(bool isModified, DateTime newLastModified)> CheckIndexMetadataBinaryAsync(DateTime? lastModified = null)
+		{
+			return await BlogRawContent.CheckIndexMetadataBinaryAsync(this, lastModified);
 		}
 	}
 }
