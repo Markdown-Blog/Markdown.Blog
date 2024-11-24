@@ -31,8 +31,8 @@ namespace Markdown.Blog.Procedures
         /// Downloads the index metadata binary file as a byte array.
         /// </summary>
         /// <param name="division">The division containing repository information.</param>
-        /// <returns>Tuple of (byte[] content, DateTime lastModifiedUtc)</returns>
-        public static async Task<(byte[] content, DateTime lastModifiedUtc)> GetIndexMetadataBinaryAsync(Division division)
+        /// <returns>Tuple of (byte[] content, string etag). etag is the current file's ETag from server</returns>
+        public static async Task<(byte[] content, string etag)> GetIndexMetadataBinaryAsync(Division division)
         {
             try
             {
@@ -41,9 +41,15 @@ namespace Markdown.Blog.Procedures
                 response.EnsureSuccessStatusCode();
 
                 var content = await response.Content.ReadAsByteArrayAsync();
-                var lastModified = response.Content.Headers.LastModified?.UtcDateTime ?? DateTime.UtcNow;
+                var etag = response.Headers.ETag?.Tag;
 
-                return (content, lastModified);
+                // If ETag is missing from response, return null
+                if (string.IsNullOrEmpty(etag))
+                {
+                    return (content, null);
+                }
+
+                return (content, etag);
             }
             catch (HttpRequestException ex)
             {
@@ -55,31 +61,31 @@ namespace Markdown.Blog.Procedures
         /// Checks if the remote binary metadata file has been modified using HTTP HEAD request
         /// </summary>
         /// <param name="division">The division containing repository information</param>
-        /// <param name="lastModified">Last known modification time in UTC</param>
-        /// <returns>Tuple of (bool isModified, DateTime newLastModified). newLastModified is always in UTC</returns>
-        public static async Task<(bool isModified, DateTime newLastModified)> CheckIndexMetadataBinaryAsync(
+        /// <param name="etag">Previous ETag value from last download</param>
+        /// <returns>Tuple of (bool isModified, string newETag). newETag is the current file's ETag from server</returns>
+        public static async Task<(bool isModified, string newETag)> CheckIndexMetadataBinaryAsync(
             Division division,
-            DateTime? lastModified = null)
+            string etag)
         {
-            // Ensure input DateTime is UTC
-            if (lastModified.HasValue && lastModified.Value.Kind != DateTimeKind.Utc)
-            {
-                throw new ArgumentException("lastModified must be in UTC", nameof(lastModified));
-            }
-
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Head, division.IndexMetadataBinaryUrl);
 
-                if (lastModified.HasValue)
+                if (!string.IsNullOrEmpty(etag))
                 {
-                    request.Headers.IfModifiedSince = lastModified.Value;
+                    request.Headers.IfNoneMatch.Add(new System.Net.Http.Headers.EntityTagHeaderValue(etag));
                 }
 
                 var response = await _httpClient.SendAsync(request);
-                var newLastModified = response.Content.Headers.LastModified?.UtcDateTime ?? DateTime.UtcNow;
+                var newETag = response.Headers.ETag?.Tag;
 
-                return (response.StatusCode != System.Net.HttpStatusCode.NotModified, newLastModified);
+                // If ETag is missing from response, treat as modified
+                if (string.IsNullOrEmpty(newETag))
+                {
+                    return (true, null!);
+                }
+
+                return (response.StatusCode != System.Net.HttpStatusCode.NotModified, newETag);
             }
             catch (HttpRequestException ex)
             {
