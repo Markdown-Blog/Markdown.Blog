@@ -59,7 +59,7 @@ namespace Markdown.Blog
 		/// </summary>
 		/// <param name="lastModified">Last known modification time in UTC</param>
 		/// <returns>Tuple of (bool isModified, DateTime newLastModified). newLastModified is always in UTC</returns>
-		public async Task<(bool isModified, string newEtag)> CheckIndexMetadataBinaryAsync(string etag)
+		public async Task<(bool isModified, string newEtag)> CheckIndexMetadataBinaryAsync(string? etag)
 		{
 			return await BlogRawContent.CheckIndexMetadataBinaryAsync(this, etag);
 		}

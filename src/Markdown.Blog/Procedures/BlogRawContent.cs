@@ -65,7 +65,7 @@ namespace Markdown.Blog.Procedures
         /// <returns>Tuple of (bool isModified, string newETag). newETag is the current file's ETag from server</returns>
         public static async Task<(bool isModified, string newETag)> CheckIndexMetadataBinaryAsync(
             Division division,
-            string etag)
+            string? etag)
         {
             try
             {
@@ -77,17 +77,27 @@ namespace Markdown.Blog.Procedures
                 }
 
                 var response = await _httpClient.SendAsync(request);
-                var newETag = response.Headers.ETag?.Tag;
-
-                // If ETag is missing from response, treat as modified
-                if (string.IsNullOrEmpty(newETag))
+                // If 304 is returned, the file has not been changed and the original etag continues to be used.
+                if (response.StatusCode == System.Net.HttpStatusCode.NotModified)
                 {
-                    return (true, null!);
+                    return (false, etag!);
                 }
 
-                return (response.StatusCode != System.Net.HttpStatusCode.NotModified, newETag);
+                // If 200, get new etag
+                var newETag = response.Headers.ETag?.Tag;
+                if (string.IsNullOrEmpty(newETag))
+                {
+                    throw new InvalidOperationException("Server did not return an ETag");
+                }
+
+                return (true, newETag);
             }
-            catch (HttpRequestException ex)
+            catch (HttpRequestException)
+            {
+                // In case of a network error, continue to use the local version assuming that the content has not been changed
+                return (false, etag ?? string.Empty);
+            }
+            catch (Exception ex)
             {
                 throw new InvalidOperationException($"Failed to check binary metadata status from {division.IndexMetadataBinaryUrl}", ex);
             }
