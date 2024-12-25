@@ -9,10 +9,10 @@ using System.Xml;
 
 namespace Markdown.Blog.Procedures
 {
-	public class BlogIndex
+	public static class BlogIndexProcessor
 	{
 		#region BlogMetadataList
-		public void BuildBlogMetadataList(List<BlogMetadata> blogMetadataList, out string json, out byte[] binary)
+		public static void BuildBlogMetadataList(List<BlogMetadata> blogMetadataList, out string json, out byte[] binary)
 		{
 			// Serialize the blog metadata list to JSON string
 			json = JsonConvert.SerializeObject(blogMetadataList, Newtonsoft.Json.Formatting.None);
@@ -36,7 +36,7 @@ namespace Markdown.Blog.Procedures
 		}
 
 		// Deserialize BlogMetadataList from JSON string
-		public List<BlogMetadata> RestoreBlogMetadataListFromJson(string json)
+		public static List<BlogMetadata> RestoreBlogMetadataListFromJson(string json)
 		{
 			// Convert JSON string back to blog metadata list
 			return JsonConvert.DeserializeObject<List<BlogMetadata>>(json)
@@ -44,7 +44,7 @@ namespace Markdown.Blog.Procedures
 		}
 
 		// Deserialize BlogMetadataList from compressed binary data
-		public List<BlogMetadata> RestoreBlogMetadataListFromBinary(byte[] binary)
+		public static List<BlogMetadata> RestoreBlogMetadataListFromBinary(byte[] binary)
 		{
 			// Decompress binary data and convert back to blog metadata list:
 			// 1. MemoryStream: Read compressed bytes
@@ -71,7 +71,7 @@ namespace Markdown.Blog.Procedures
 		/// </summary>
 		/// <param name="blogMetadataList">The list of blog metadata.</param>
 		/// <returns>A dictionary with tags as keys and their article counts as values, ordered by tag name alphabetically.</returns>
-		public Dictionary<string, int> OrganizeTagsAndArticleCounts(List<BlogMetadata> blogMetadataList)
+		public static Dictionary<string, int> OrganizeTagsAndArticleCounts(List<BlogMetadata> blogMetadataList)
 		{
 			Dictionary<string, int> result;
 			var tagCounts = new Dictionary<string, int>();
@@ -108,7 +108,7 @@ namespace Markdown.Blog.Procedures
 		/// </summary>
 		/// <param name="blogMetadataList">The list of blog metadata.</param>
 		/// <returns>A list of tuples, each containing the category, subcategory, and the count of blogs under the subcategory.</returns>
-		public List<(string Category, string SubCategory, int BlogCount)> GetCategoriesAndSubcategoriesWithBlogCount(List<BlogMetadata> blogMetadataList)
+		public static List<(string Category, string SubCategory, int BlogCount)> GetCategoriesAndSubcategoriesWithBlogCount(List<BlogMetadata> blogMetadataList)
 		{
 			var categories = new List<(string Category, string SubCategory, int BlogCount)>();
 			var subCategoryCounts = new Dictionary<string, int>();
@@ -148,7 +148,7 @@ namespace Markdown.Blog.Procedures
 		/// <param name="coverImageStatus">Specifies the cover image status to filter by.</param>
 		/// <param name="startIndex">The starting index position. Defaults to 0, meaning to start from the first blog.</param>
 		/// <returns>A dictionary where each key is a category or division and the value is a list of the latest blogs, filtered by cover image status, starting from the specified index.</returns>
-		public Dictionary<string, List<BlogMetadata>> GetLatestBlogs(List<BlogMetadata> blogMetadataList, bool isPerCategory, int numberOfBlogs, CoverImageStatus coverImageStatus, int startIndex = 0)
+		public static Dictionary<string, List<BlogMetadata>> GetLatestBlogs(List<BlogMetadata> blogMetadataList, bool isPerCategory, int numberOfBlogs, CoverImageStatus coverImageStatus, int startIndex = 0)
 		{
 			var latestBlogs = new Dictionary<string, List<BlogMetadata>>();
 			var keySelector = isPerCategory
@@ -180,7 +180,7 @@ namespace Markdown.Blog.Procedures
 			return latestBlogs;
 		}
 
-		private bool FilterByCoverImageStatus(BlogMetadata metadata, CoverImageStatus status)
+		private static bool FilterByCoverImageStatus(BlogMetadata metadata, CoverImageStatus status)
 		{
 			switch (status)
 			{

@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Markdown.Blog.Procedures
 {
-    public static class BlogRawContent
+    public static class BlogRawContentProcessor
     {
         // Add static HttpClient for better performance
         private static readonly HttpClient _httpClient = new HttpClient();
@@ -29,12 +29,32 @@ namespace Markdown.Blog.Procedures
             }
         }
 
-        /// <summary>
-        /// Downloads the index metadata binary file as a byte array.
-        /// </summary>
-        /// <param name="division">The division containing repository information.</param>
-        /// <returns>Tuple of (byte[] content, string etag). etag is the current file's ETag from server</returns>
-        public static async Task<(byte[] content, string etag)> GetIndexMetadataBinaryAsync(Division division)
+        /*
+		/// <summary>
+		/// Downloads and deserializes the index metadata JSON file into a list of BlogMetadata objects.
+		/// </summary>
+		/// <param name="division">The division containing repository information.</param>
+		/// <returns>A list of BlogMetadata objects.</returns>
+		public static async Task<List<BlogMetadata>> GetIndexMetadataAsync(Division division)
+		{
+			try
+			{
+				string json = await GetIndexMetadataJsonAsync(division);
+				return BlogMetadataProcessor.DeserializeMetadata(json);
+			}
+			catch (JsonException ex)
+			{
+				throw new InvalidOperationException("Failed to parse blog metadata JSON", ex);
+			}
+		}
+        */
+
+		/// <summary>
+		/// Downloads the index metadata binary file as a byte array.
+		/// </summary>
+		/// <param name="division">The division containing repository information.</param>
+		/// <returns>Tuple of (byte[] content, string etag). etag is the current file's ETag from server</returns>
+		public static async Task<(byte[] content, string etag)> GetIndexMetadataBinaryAsync(Division division)
         {
             try
             {
@@ -105,24 +125,6 @@ namespace Markdown.Blog.Procedures
             }
         }
 
-        /// <summary>
-        /// Downloads and deserializes the index metadata JSON file into a list of BlogMetadata objects.
-        /// </summary>
-        /// <param name="division">The division containing repository information.</param>
-        /// <returns>A list of BlogMetadata objects.</returns>
-        public static async Task<List<BlogMetadata>> GetIndexMetadataAsync(Division division)
-        {
-            try
-            {
-                string json = await GetIndexMetadataJsonAsync(division);
-                return JsonConvert.DeserializeObject<List<BlogMetadata>>(json)
-                    ?? throw new InvalidOperationException("Failed to deserialize blog metadata");
-            }
-            catch (JsonException ex)
-            {
-                throw new InvalidOperationException("Failed to parse blog metadata JSON", ex);
-            }
-        }
         #endregion
 
         #region Blog Content

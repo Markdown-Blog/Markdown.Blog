@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Markdown.Blog.Procedures
 {
-	public class BlogMetadataYaml
+	public static class BlogMetadataYamlProcessor
 	{
 		/// <summary>
 		/// Extracts YAML content from a markdown string.

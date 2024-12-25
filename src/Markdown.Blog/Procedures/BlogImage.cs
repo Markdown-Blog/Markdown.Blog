@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace Markdown.Blog.Procedures
 {
-	public class BlogImage
+	public static class BlogImageProcessor
 	{
 
 		/// <summary>

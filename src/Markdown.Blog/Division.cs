@@ -38,7 +38,7 @@ namespace Markdown.Blog
 		/// <returns>The content of the index metadata JSON file as a string.</returns>
 		public async Task<string> GetIndexMetadataJsonAsync()
 		{
-			return await BlogRawContent.GetIndexMetadataJsonAsync(this);
+			return await BlogRawContentProcessor.GetIndexMetadataJsonAsync(this);
 		}
 
 		/// <summary>
@@ -52,7 +52,7 @@ namespace Markdown.Blog
 		/// <exception cref="InvalidOperationException">Thrown when the download fails</exception>
 		public async Task<(byte[] content, string etag)> GetIndexMetadataBinaryAsync()
 		{
-			return await BlogRawContent.GetIndexMetadataBinaryAsync(this);
+			return await BlogRawContentProcessor.GetIndexMetadataBinaryAsync(this);
 		}
 
 		/// Checks if the index metadata binary file has been modified since the last known modification time.
@@ -61,7 +61,7 @@ namespace Markdown.Blog
 		/// <returns>Tuple of (bool isModified, DateTime newLastModified). newLastModified is always in UTC</returns>
 		public async Task<(bool isModified, string newEtag)> CheckIndexMetadataBinaryAsync(string? etag)
 		{
-			return await BlogRawContent.CheckIndexMetadataBinaryAsync(this, etag);
+			return await BlogRawContentProcessor.CheckIndexMetadataBinaryAsync(this, etag);
 		}
 	}
 }

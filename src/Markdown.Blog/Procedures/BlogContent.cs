@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Markdown.Blog.Procedures
 {
-	public class BlogContent
+	public static class BlogContentProcessor
 	{
 		/// <summary>
 		/// Convert Markdown content to HTML with GitHub image path resolution

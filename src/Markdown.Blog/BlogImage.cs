@@ -77,7 +77,7 @@ namespace Markdown.Blog
 		/// <returns>完整的图片路径</returns>
 		public string GetAbsolutePath()
 		{
-			return Procedures.BlogImage.ConstructImagePath(MarkdownFilePath, AssetId, ImageFileName, ImagePathType.Absolute);
+			return Procedures.BlogImageProcessor.ConstructImagePath(MarkdownFilePath, AssetId, ImageFileName, ImagePathType.Absolute);
 		}
 
 		/// <summary>
@@ -86,7 +86,7 @@ namespace Markdown.Blog
 		/// <returns>相对路径</returns>
 		public string GetRelativePath()
 		{
-			return Procedures.BlogImage.ConstructImagePath(MarkdownFilePath, AssetId, ImageFileName, ImagePathType.RelativeToMarkdown);
+			return Procedures.BlogImageProcessor.ConstructImagePath(MarkdownFilePath, AssetId, ImageFileName, ImagePathType.RelativeToMarkdown);
 		}
 
 	}
