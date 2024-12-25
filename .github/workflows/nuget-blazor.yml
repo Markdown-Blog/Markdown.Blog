@@ -36,7 +36,7 @@ jobs:
           sed -i "s/<Version>\$(VersionPrefix)\.0\.$current_version<\/Version>/<Version>\$(VersionPrefix).0.$new_version<\/Version>/" src/Markdown.Blog.Blazor/Markdown.Blog.Blazor.csproj
 
           # Update release notes
-          commit_message=$(git log -1 --pretty=%B)
+          commit_message=$(git log --no-merges -1 --pretty=%B)
           sed -i "s|<PackageReleaseNotes>.*</PackageReleaseNotes>|<PackageReleaseNotes>$commit_message</PackageReleaseNotes>|" src/Markdown.Blog.Blazor/Markdown.Blog.Blazor.csproj
 
       - name: Commit and push changes
