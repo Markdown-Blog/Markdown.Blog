@@ -1,6 +1,8 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Markdown.Blog.Procedures
 {
@@ -100,6 +102,25 @@ namespace Markdown.Blog.Procedures
             catch (Exception ex)
             {
                 throw new InvalidOperationException($"Failed to check binary metadata status from {division.IndexMetadataBinaryUrl}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Downloads and deserializes the index metadata JSON file into a list of BlogMetadata objects.
+        /// </summary>
+        /// <param name="division">The division containing repository information.</param>
+        /// <returns>A list of BlogMetadata objects.</returns>
+        public static async Task<List<BlogMetadata>> GetIndexMetadataAsync(Division division)
+        {
+            try
+            {
+                string json = await GetIndexMetadataJsonAsync(division);
+                return JsonConvert.DeserializeObject<List<BlogMetadata>>(json)
+                    ?? throw new InvalidOperationException("Failed to deserialize blog metadata");
+            }
+            catch (JsonException ex)
+            {
+                throw new InvalidOperationException("Failed to parse blog metadata JSON", ex);
             }
         }
         #endregion
