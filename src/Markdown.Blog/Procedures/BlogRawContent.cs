@@ -1,15 +1,21 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace Markdown.Blog.Procedures
 {
     public static class BlogRawContentProcessor
     {
         // Add static HttpClient for better performance
-        private static readonly HttpClient _httpClient = new HttpClient();
+        private static readonly HttpClient _httpClient = new HttpClient(new HttpClientHandler
+        {
+            AutomaticDecompression = DecompressionMethods.None,
+            AllowAutoRedirect = false
+        });
 
         #region Index Metadata
         /// <summary>
@@ -54,14 +60,13 @@ namespace Markdown.Blog.Procedures
 		/// </summary>
 		/// <param name="division">The division containing repository information.</param>
 		/// <returns>Response containing content, ETag and headers.</returns>
-		public static async Task<(byte[] Content, string? ETag, System.Net.Http.Headers.HttpResponseHeaders Headers)> GetIndexMetadataBinaryWithHeadersAsync(Division division)
+		public static async Task<(byte[] Content, string? ETag, HttpResponseHeaders Headers)> GetIndexMetadataBinaryWithHeadersAsync(Division division)
         {
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, division.IndexMetadataBinaryUrl);
-                request.Headers.Add("Accept-Encoding", "gzip");
 
-                var response = await _httpClient.SendAsync(request);
+                using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
                 response.EnsureSuccessStatusCode();
 
                 var content = await response.Content.ReadAsByteArrayAsync();
