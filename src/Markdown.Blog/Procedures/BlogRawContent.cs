@@ -50,11 +50,11 @@ namespace Markdown.Blog.Procedures
         */
 
 		/// <summary>
-		/// Downloads the index metadata binary file as a byte array.
+		/// Downloads the index metadata binary file as a byte array with full response headers.
 		/// </summary>
 		/// <param name="division">The division containing repository information.</param>
-		/// <returns>Tuple of (byte[] content, string etag). etag is the current file's ETag from server</returns>
-		public static async Task<(byte[] content, string etag)> GetIndexMetadataBinaryAsync(Division division)
+		/// <returns>Response containing content, ETag and headers.</returns>
+		public static async Task<(byte[] Content, string? ETag, System.Net.Http.Headers.HttpResponseHeaders Headers)> GetIndexMetadataBinaryWithHeadersAsync(Division division)
         {
             try
             {
@@ -65,18 +65,23 @@ namespace Markdown.Blog.Procedures
                 var content = await response.Content.ReadAsByteArrayAsync();
                 var etag = response.Headers.ETag?.Tag;
 
-                // If ETag is missing from response, return null
-                if (string.IsNullOrEmpty(etag))
-                {
-                    return (content, null);
-                }
-
-                return (content, etag);
+                return (content, etag, response.Headers);
             }
             catch (HttpRequestException ex)
             {
                 throw new InvalidOperationException($"Failed to download binary metadata from {division.IndexMetadataBinaryUrl}", ex);
             }
+        }
+
+        /// <summary>
+        /// Downloads the index metadata binary file as a byte array.
+        /// </summary>
+        /// <param name="division">The division containing repository information.</param>
+        /// <returns>Tuple of (byte[] content, string etag). etag is the current file's ETag from server</returns>
+        public static async Task<(byte[] content, string? etag)> GetIndexMetadataBinaryAsync(Division division)
+        {
+            var response = await GetIndexMetadataBinaryWithHeadersAsync(division);
+            return (response.Content, response.ETag ?? null);
         }
 
         /// <summary>
