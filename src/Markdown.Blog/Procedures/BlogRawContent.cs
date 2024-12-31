@@ -59,6 +59,8 @@ namespace Markdown.Blog.Procedures
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, division.IndexMetadataBinaryUrl);
+                request.Headers.Add("Accept-Encoding", "gzip");
+
                 var response = await _httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
 
