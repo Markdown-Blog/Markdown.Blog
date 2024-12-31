@@ -15,7 +15,7 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>Markdown.Blog</Title>
 		<VersionPrefix>0</VersionPrefix>
-		<Version>$(VersionPrefix).0.23</Version>
+		<Version>$(VersionPrefix).0.24</Version>
 		<Authors>zhiliang</Authors>
 		<Company />
 		<Description>Markdown.Blog: A convenient and flexible .NET-based reusable component for generating blogs using Markdown.</Description>
