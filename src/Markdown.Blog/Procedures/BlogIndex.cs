@@ -11,55 +11,63 @@ namespace Markdown.Blog.Procedures
 {
 	public static class BlogIndexProcessor
 	{
-		#region BlogMetadataList
-		public static void BuildBlogMetadataList(List<BlogMetadata> blogMetadataList, out string json, out byte[] binary)
+		#region BlogIndex
+		/// <summary>
+		/// Builds a blog index with JSON and binary outputs.
+		/// </summary>
+		/// <param name="id">The version number to assign to this index.</param>
+		/// <param name="blogMetadataList">The list of blog metadata to include in the index.</param>
+		/// <param name="json">Output JSON string representation of the blog index.</param>
+		/// <param name="binary">Output compressed binary data of the blog index.</param>
+		public static void BuildBlogIndex(int id, List<BlogMetadata> blogMetadataList, out string json, out byte[] binary)
 		{
-			// Serialize the blog metadata list to JSON string
-			json = JsonConvert.SerializeObject(blogMetadataList, Newtonsoft.Json.Formatting.None);
+			var blogIndex = new BlogIndex
+			{
+				Id = id,
+				DateTime = DateTime.UtcNow,
+				BlogMetadataList = blogMetadataList
+			};
 
-			// Compress the JSON string to binary:
-			// 1. MemoryStream: Temporary container for compressed bytes
-			// 2. GZipStream: Performs compression with optimal level
-			// 3. StreamWriter: Converts string to bytes for compression
+			// Serialize the entire BlogIndex object to JSON
+			json = JsonConvert.SerializeObject(blogIndex, Newtonsoft.Json.Formatting.None);
+
+			// Compress JSON string to binary data
 			using (var memoryStream = new MemoryStream())
 			{
 				using (var gzipStream = new GZipStream(memoryStream, CompressionLevel.Optimal))
 				using (var writer = new StreamWriter(gzipStream))
 				{
-					// Write the JSON string through the compression pipeline
 					writer.Write(json);
 				}
-
-				// Get the raw compressed bytes
 				binary = memoryStream.ToArray();
 			}
 		}
 
-		// Deserialize BlogMetadataList from JSON string
-		public static List<BlogMetadata> RestoreBlogMetadataListFromJson(string json)
+		/// <summary>
+		/// Restores a BlogIndex object from its JSON representation.
+		/// </summary>
+		/// <param name="json">The JSON string to deserialize.</param>
+		/// <returns>A BlogIndex object, or a new instance if deserialization fails.</returns>
+		public static BlogIndex RestoreBlogIndexFromJson(string json)
 		{
-			// Convert JSON string back to blog metadata list
-			return JsonConvert.DeserializeObject<List<BlogMetadata>>(json)
-				?? new List<BlogMetadata>();
+			return JsonConvert.DeserializeObject<BlogIndex>(json)
+				?? new BlogIndex { BlogMetadataList = new List<BlogMetadata>() };
 		}
 
-		// Deserialize BlogMetadataList from compressed binary data
-		public static List<BlogMetadata> RestoreBlogMetadataListFromBinary(byte[] binary)
+		/// <summary>
+		/// Restores a BlogIndex object from its compressed binary representation.
+		/// </summary>
+		/// <param name="binary">The compressed binary data to deserialize.</param>
+		/// <returns>A BlogIndex object, or a new instance if deserialization fails.</returns>
+		public static BlogIndex RestoreBlogIndexFromBinary(byte[] binary)
 		{
-			// Decompress binary data and convert back to blog metadata list:
-			// 1. MemoryStream: Read compressed bytes
-			// 2. GZipStream: Performs decompression
-			// 3. StreamReader: Reads decompressed bytes as string
 			using (var memoryStream = new MemoryStream(binary))
 			using (var gzipStream = new GZipStream(memoryStream, CompressionMode.Decompress))
 			using (var reader = new StreamReader(gzipStream))
 			{
-				// Read the decompressed JSON string
 				string json = reader.ReadToEnd();
-
-				// Convert JSON string back to blog metadata list
-				return JsonConvert.DeserializeObject<List<BlogMetadata>>(json)
-					?? new List<BlogMetadata>();
+				return JsonConvert.DeserializeObject<BlogIndex>(json)
+					?? new BlogIndex { BlogMetadataList = new List<BlogMetadata>() };
 			}
 		}
 		#endregion

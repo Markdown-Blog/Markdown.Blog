@@ -11,11 +11,7 @@ namespace Markdown.Blog.Procedures
     public static class BlogRawContentProcessor
     {
         // Add static HttpClient for better performance
-        private static readonly HttpClient _httpClient = new HttpClient(new HttpClientHandler
-        {
-            AutomaticDecompression = DecompressionMethods.None,
-            AllowAutoRedirect = false
-        });
+        private static readonly HttpClient _httpClient = new HttpClient();
 
         #region Index Metadata
         /// <summary>
