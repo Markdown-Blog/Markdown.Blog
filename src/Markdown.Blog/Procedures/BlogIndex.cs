@@ -12,6 +12,16 @@ namespace Markdown.Blog.Procedures
 	public static class BlogIndexProcessor
 	{
 		#region BlogIndex
+
+		private static string BlogIndexFileNameTemplate = "index.{id}.json";
+
+		public static string GetBlogIndexFileNameUncompressed(int version = default) => 
+			(version == default) 
+			? BlogIndexFileNameTemplate.Replace("{id}.", "") 
+			: BlogIndexFileNameTemplate.Replace("{id}", version.ToString());
+
+		public static string GetBlogIndexFileNameCompressed(int version = default) => GetBlogIndexFileNameUncompressed() + ".gz";
+
 		/// <summary>
 		/// Builds a blog index with JSON and binary outputs.
 		/// </summary>
