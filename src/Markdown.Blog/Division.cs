@@ -24,44 +24,49 @@ namespace Markdown.Blog
 		// The URL is in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/
 		public string RawUrlBase => $"https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/";
 
-		// Gets the URL for the index metadata JSON.
-		// The URL is in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/indexMetadata.json
-		public string IndexMetadataJsonUrl => $"{RawUrlBase}indexMetadata.json";
+		/// <summary>
+		/// Gets the URL for the blog index JSON file.
+		/// </summary>
+		/// <param name="version">The version of the index file. Defaults to 0 for the latest version.</param>
+		/// <returns>The URL in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/index[.v{version}].json</returns>
+		public string GetIndexJsonUrl(int version = 0) => 
+			$"{RawUrlBase}{BlogIndexProcessor.GetBlogIndexFileNameUncompressed(version)}";
 
-		// Gets the URL for the index metadata binary.
-		// The URL is in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/indexMetadata.json.gz
-		public string IndexMetadataBinaryUrl => $"{RawUrlBase}indexMetadata.json.gz";
+		/// <summary>
+		/// Gets the URL for the blog index binary file.
+		/// </summary>
+		/// <param name="version">The version of the index file. Defaults to 0 for the latest version.</param>
+		/// <returns>The URL in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/index[.v{version}].json.gz</returns>
+		public string GetIndexBinaryUrl(int version = 0) => 
+			$"{RawUrlBase}{BlogIndexProcessor.GetBlogIndexFileNameCompressed(version)}";
 
 		/// <summary>
 		/// Downloads the index metadata JSON file as a string.
 		/// </summary>
 		/// <returns>The content of the index metadata JSON file as a string.</returns>
-		public async Task<string> GetIndexMetadataJsonAsync()
+		public async Task<string> GetIndexJsonAsync()
 		{
-			return await BlogRawContentProcessor.GetIndexMetadataJsonAsync(this);
+			return await BlogRawContentProcessor.GetIndexJsonAsync(this);
 		}
 
 		/// <summary>
-		/// Downloads the index metadata binary file as a byte array and returns its last modified time.
+		/// Downloads the blog index binary file as a byte array.
 		/// </summary>
-		/// <returns>
-		/// A tuple containing:
-		/// - content: The content of the index metadata binary file
-		/// - lastModified: The last modified time (UTC) of the file from server
-		/// </returns>
+		/// <returns>The binary content of the blog index file.</returns>
 		/// <exception cref="InvalidOperationException">Thrown when the download fails</exception>
-		public async Task<(byte[] content, string etag)> GetIndexMetadataBinaryAsync()
+		public async Task<byte[]> GetIndexBinaryAsync()
 		{
-			return await BlogRawContentProcessor.GetIndexMetadataBinaryAsync(this);
+			return await BlogRawContentProcessor.GetBlogIndexBinaryAsync(this);
 		}
 
-		/// Checks if the index metadata binary file has been modified since the last known modification time.
+		/// <summary>
+		/// Checks if the specified version of blog index binary file exists.
 		/// </summary>
-		/// <param name="lastModified">Last known modification time in UTC</param>
-		/// <returns>Tuple of (bool isModified, DateTime newLastModified). newLastModified is always in UTC</returns>
-		public async Task<(bool isModified, string newEtag)> CheckIndexMetadataBinaryAsync(string? etag)
+		/// <param name="version">The version number to check</param>
+		/// <returns>True if the specified version exists, false if it returns 404</returns>
+		public async Task<bool> CheckBlogIndexBinaryAsync(int version)
 		{
-			return await BlogRawContentProcessor.CheckIndexMetadataBinaryAsync(this, etag);
+			return await BlogRawContentProcessor.CheckBlogIndexBinaryAsync(this, version);
 		}
 	}
 }

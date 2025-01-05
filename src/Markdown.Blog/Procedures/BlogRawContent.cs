@@ -19,117 +19,65 @@ namespace Markdown.Blog.Procedures
         /// </summary>
         /// <param name="division">The division containing repository information.</param>
         /// <returns>The content of the index metadata JSON file as a string.</returns>
-        public static async Task<string> GetIndexMetadataJsonAsync(Division division)
+        public static async Task<string> GetIndexJsonAsync(Division division)
         {
             try
             {
-                return await _httpClient.GetStringAsync(division.IndexMetadataJsonUrl);
+                return await _httpClient.GetStringAsync(division.GetIndexJsonUrl());
             }
             catch (HttpRequestException ex)
             {
-                throw new InvalidOperationException($"Failed to download metadata from {division.IndexMetadataJsonUrl}", ex);
-            }
-        }
-
-        /*
-		/// <summary>
-		/// Downloads and deserializes the index metadata JSON file into a list of BlogMetadata objects.
-		/// </summary>
-		/// <param name="division">The division containing repository information.</param>
-		/// <returns>A list of BlogMetadata objects.</returns>
-		public static async Task<List<BlogMetadata>> GetIndexMetadataAsync(Division division)
-		{
-			try
-			{
-				string json = await GetIndexMetadataJsonAsync(division);
-				return BlogMetadataProcessor.DeserializeMetadata(json);
-			}
-			catch (JsonException ex)
-			{
-				throw new InvalidOperationException("Failed to parse blog metadata JSON", ex);
-			}
-		}
-        */
-
-		/// <summary>
-		/// Downloads the index metadata binary file as a byte array with full response headers.
-		/// </summary>
-		/// <param name="division">The division containing repository information.</param>
-		/// <returns>Response containing content, ETag and headers.</returns>
-		public static async Task<(byte[] Content, string? ETag, HttpResponseHeaders Headers)> GetIndexMetadataBinaryWithHeadersAsync(Division division)
-        {
-            try
-            {
-                var request = new HttpRequestMessage(HttpMethod.Get, division.IndexMetadataBinaryUrl);
-
-                using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-                response.EnsureSuccessStatusCode();
-
-                var content = await response.Content.ReadAsByteArrayAsync();
-                var etag = response.Headers.ETag?.Tag;
-
-                return (content, etag, response.Headers);
-            }
-            catch (HttpRequestException ex)
-            {
-                throw new InvalidOperationException($"Failed to download binary metadata from {division.IndexMetadataBinaryUrl}", ex);
+                throw new InvalidOperationException($"Failed to download metadata from {division.GetIndexJsonUrl()}", ex);
             }
         }
 
         /// <summary>
-        /// Downloads the index metadata binary file as a byte array.
+        /// Downloads the blog index binary file as a byte array.
         /// </summary>
         /// <param name="division">The division containing repository information.</param>
-        /// <returns>Tuple of (byte[] content, string etag). etag is the current file's ETag from server</returns>
-        public static async Task<(byte[] content, string? etag)> GetIndexMetadataBinaryAsync(Division division)
-        {
-            var response = await GetIndexMetadataBinaryWithHeadersAsync(division);
-            return (response.Content, response.ETag ?? null);
-        }
-
-        /// <summary>
-        /// Checks if the remote binary metadata file has been modified using HTTP HEAD request
-        /// </summary>
-        /// <param name="division">The division containing repository information</param>
-        /// <param name="etag">Previous ETag value from last download</param>
-        /// <returns>Tuple of (bool isModified, string newETag). newETag is the current file's ETag from server</returns>
-        public static async Task<(bool isModified, string newETag)> CheckIndexMetadataBinaryAsync(
-            Division division,
-            string? etag)
+        /// <returns>The binary content of the blog index file.</returns>
+        public static async Task<byte[]> GetBlogIndexBinaryAsync(Division division)
         {
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Head, division.IndexMetadataBinaryUrl);
+                var request = new HttpRequestMessage(HttpMethod.Get, division.GetIndexBinaryUrl());
+                request.Headers.CacheControl = new CacheControlHeaderValue { NoCache = true };
 
-                if (!string.IsNullOrEmpty(etag))
-                {
-                    request.Headers.IfNoneMatch.Add(new System.Net.Http.Headers.EntityTagHeaderValue(etag));
-                }
+                using var response = await _httpClient.SendAsync(request);
+                response.EnsureSuccessStatusCode();
 
+                return await response.Content.ReadAsByteArrayAsync();
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new InvalidOperationException($"Failed to download binary blog index from {division.GetIndexBinaryUrl()}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Checks if the next version of blog index binary file exists.
+        /// </summary>
+        /// <param name="division">The division containing repository information</param>
+        /// <param name="version">The version to check (typically current version + 1)</param>
+        /// <returns>True if the specified version exists, false if it returns 404</returns>
+        public static async Task<bool> CheckBlogIndexBinaryAsync(
+            Division division,
+            int version)
+        {
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Head, division.GetIndexBinaryUrl(version));
                 var response = await _httpClient.SendAsync(request);
-                // If 304 is returned, the file has not been changed and the original etag continues to be used.
-                if (response.StatusCode == System.Net.HttpStatusCode.NotModified)
-                {
-                    return (false, etag!);
-                }
-
-                // If 200, get new etag
-                var newETag = response.Headers.ETag?.Tag;
-                if (string.IsNullOrEmpty(newETag))
-                {
-                    throw new InvalidOperationException("Server did not return an ETag");
-                }
-
-                return (true, newETag);
+                
+                return response.StatusCode == HttpStatusCode.OK;
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException ex)
             {
-                // In case of a network error, continue to use the local version assuming that the content has not been changed
-                return (false, etag ?? string.Empty);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException($"Failed to check binary metadata status from {division.IndexMetadataBinaryUrl}", ex);
+                if (ex.Message.Contains("404"))
+                {
+                    return false;
+                }
+                throw new InvalidOperationException($"Failed to check blog index version {version} at {division.GetIndexBinaryUrl(version)}", ex);
             }
         }
 
