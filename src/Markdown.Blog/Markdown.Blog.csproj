@@ -15,7 +15,7 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>Markdown.Blog</Title>
 		<VersionPrefix>0</VersionPrefix>
-		<Version>$(VersionPrefix).0.29</Version>
+		<Version>$(VersionPrefix).1.0</Version>
 		<Authors>zhiliang</Authors>
 		<Company />
 		<Description>Markdown.Blog: A convenient and flexible .NET-based reusable component for generating blogs using Markdown.</Description>
@@ -36,6 +36,10 @@
 		<PackageReference Include="YamlDotNet" Version="16.0.0" />
 		<None Include="Resources\logo_128x128.png" Pack="true" PackagePath="\" />
 		<None Update="Resources\readme.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Server\" />
 	</ItemGroup>
 
 </Project>

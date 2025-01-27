@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using Markdown.Blog.Procedures;
+using Markdown.Blog.Shared;
 
-namespace Markdown.Blog
+namespace Markdown.Blog.Client
 {
     /// <summary>
     /// Represents a blog post with its content and metadata.
@@ -33,7 +33,7 @@ namespace Markdown.Blog
         /// <returns>A task representing the asynchronous operation.</returns>
         public async Task<bool> LoadMdContent(Division division)
         {
-            MdContent = await BlogRawContentProcessor.GetContentAsync(division, this);
+            MdContent = await BlogContentLoader.GetContentAsync(division, this);
             return IsMdContentLoaded;
         }
 
