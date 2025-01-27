@@ -28,12 +28,15 @@ jobs:
 
       - name: Update version and release notes
         run: |
-          # Get the current version
-          current_version=$(grep -oP '(?<=<Version>\$\(VersionPrefix\)\.0\.)\d+(?=</Version>)' src/Markdown.Blog/Markdown.Blog.csproj)
-          new_version=$((current_version + 1))
-
+          # Get the current version parts
+          version_string=$(grep -oP '(?<=<Version>\$\(VersionPrefix\)\.)[0-9]+\.[0-9]+(?=</Version>)' src/Markdown.Blog/Markdown.Blog.csproj)
+          IFS='.' read -r major minor <<< "$version_string"
+          
+          # Increment the minor version
+          new_minor=$((minor + 1))
+          
           # Update version
-          sed -i "s/<Version>\$(VersionPrefix)\.0\.$current_version<\/Version>/<Version>\$(VersionPrefix).0.$new_version<\/Version>/" src/Markdown.Blog/Markdown.Blog.csproj
+          sed -i "s/<Version>\$(VersionPrefix)\.$major\.$minor<\/Version>/<Version>\$(VersionPrefix).$major.$new_minor<\/Version>/" src/Markdown.Blog/Markdown.Blog.csproj
 
           # Update release notes
           commit_message=$(git log --no-merges -1 --pretty=%B)
