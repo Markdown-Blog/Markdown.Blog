@@ -89,9 +89,9 @@ namespace Markdown.Blog.Server
             return int.TryParse(versionStr, out int version) ? version : 0;
         }
 
-        private static string GetBlogIndexFileNameUncompressed() => "index.json";
-        private static string GetBlogIndexFileNameCompressed() => GetBlogIndexFileNameUncompressed() + ".gz";
-        private static string GetBlogIndexFileNameVersion() => "index.version";
+        public static string GetBlogIndexFileNameUncompressed() => BlogIndexFileNames.Json;
+        public static string GetBlogIndexFileNameCompressed() => BlogIndexFileNames.CompressedJson;
+        public static string GetBlogIndexFileNameVersion() => BlogIndexFileNames.Version;
     }
 
     public class BlogIndexUpdateResult

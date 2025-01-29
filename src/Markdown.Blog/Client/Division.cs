@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Markdown.Blog.Shared;
 
 namespace Markdown.Blog.Client
 {
@@ -18,9 +19,6 @@ namespace Markdown.Blog.Client
         // Gets or sets the name of the division.
         public string DivisionName { get; set; }
 
-        // Constants for file names
-        private const string IndexJsonFileName = "index.json";
-        private const string IndexVersionFileName = "index.version";
 
         // Gets the path for the division, which is the same as DivisionName
         public string Path => DivisionName;
@@ -34,24 +32,24 @@ namespace Markdown.Blog.Client
         /// Gets the URL for the blog index JSON file.
         /// </summary>
         /// <param name="version">The version of the index file. Defaults to 0 for the latest version.</param>
-        /// <returns>The URL in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/index[.v{version}].json</returns>
+        /// <returns>The URL in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/index.json</returns>
         public string GetIndexJsonUrl() =>
-            $"{RawUrlBase}{IndexJsonFileName}";
+            $"{RawUrlBase}{BlogIndexFileNames.Json}";
 
         /// <summary>
         /// Gets the URL for the blog index binary file.
         /// </summary>
         /// <param name="version">The version of the index file. Defaults to 0 for the latest version.</param>
-        /// <returns>The URL in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/index[.v{version}].json.gz</returns>
+        /// <returns>The URL in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/index.json.gz</returns>
         public string GetIndexBinaryUrl() =>
-            $"{RawUrlBase}{IndexJsonFileName}.gz";
+            $"{RawUrlBase}{BlogIndexFileNames.CompressedJson}";
 
         /// <summary>
         /// Gets the URL for the blog index version file.
         /// </summary>
         /// <returns>The URL in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/index.version</returns>
         public string GetIndexVersionUrl() =>
-            $"{RawUrlBase}{IndexVersionFileName}";
+            $"{RawUrlBase}{BlogIndexFileNames.Version}";
 
         /// <summary>
         /// Downloads the index metadata JSON file as a string.

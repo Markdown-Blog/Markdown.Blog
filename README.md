@@ -112,7 +112,7 @@ tags:
   - Guide
   - Tutorial
   - Advanced
-coverImages:
+coverImages:    # Optional, will be overwritten if images exist in cover section
   - images/2024/guide-cover1.jpg
   - images/2024/guide-cover2.jpg
 pathSegments:
@@ -185,6 +185,12 @@ All metadata fields are extracted from the YAML front matter at the beginning of
 ## Index Features
 
 The blog system provides several indexing methods through the `BlogIndex` class to organize and retrieve blog posts efficiently:
+
+### Index File Conventions
+Each Division maintains three index files:
+- `index.json.gz`: Compressed binary format of the full index
+- `index.json`: Uncompressed JSON format of the full index
+- `index.version`: A plain text file containing the current version number of the index
 
 ### Blog Metadata List Management
 - Supports serialization and deserialization of blog metadata in both JSON and compressed binary formats
