@@ -34,7 +34,7 @@ namespace Markdown.Blog.Client
         /// <param name="version">The version of the index file. Defaults to 0 for the latest version.</param>
         /// <returns>The URL in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/index.json</returns>
         public string GetIndexJsonUrl() =>
-            $"{RawUrlBase}{BlogIndexFileNames.Json}";
+            $"{RawUrlBase(true)}{BlogIndexFileNames.Json}";
 
         /// <summary>
         /// Gets the URL for the blog index binary file.
@@ -42,14 +42,14 @@ namespace Markdown.Blog.Client
         /// <param name="version">The version of the index file. Defaults to 0 for the latest version.</param>
         /// <returns>The URL in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/index.json.gz</returns>
         public string GetIndexBinaryUrl() =>
-            $"{RawUrlBase}{BlogIndexFileNames.CompressedJson}";
+            $"{RawUrlBase(true)}{BlogIndexFileNames.CompressedJson}";
 
         /// <summary>
         /// Gets the URL for the blog index version file.
         /// </summary>
         /// <returns>The URL in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/index.version</returns>
         public string GetIndexVersionUrl() =>
-            $"{RawUrlBase}{BlogIndexFileNames.Version}";
+            $"{RawUrlBase(true)}{BlogIndexFileNames.Version}";
 
         /// <summary>
         /// Downloads the index metadata JSON file as a string.
