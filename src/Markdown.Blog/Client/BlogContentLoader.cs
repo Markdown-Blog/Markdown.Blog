@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -8,11 +9,27 @@ namespace Markdown.Blog.Client
 	/// </summary>
 	public static class BlogContentLoader
 	{
-		private static readonly HttpClient httpClient = new HttpClient();
+		private static readonly HttpClient httpClient;
+
+		static BlogContentLoader()
+		{
+			httpClient = new HttpClient();
+			// Add default headers to prevent caching
+			httpClient.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue
+			{
+				NoCache = true,
+				NoStore = true,
+				MustRevalidate = true,
+				MaxAge = TimeSpan.Zero
+			};
+			httpClient.DefaultRequestHeaders.Pragma.Add(new System.Net.Http.Headers.NameValueHeaderValue("no-cache"));
+		}
 
 		public static string ConstructGitHubRawUrl(Division division, string filePath, bool pathStartedInDivision = false)
 		{
-			return $"{division.RawUrlBase(pathStartedInDivision)}{filePath}";
+			// Add cache buster to URL
+			string url = $"{division.RawUrlBase(pathStartedInDivision)}{filePath}";
+			return $"{url}?t={DateTime.UtcNow.Ticks}";
 		}
 
 		/// <summary>

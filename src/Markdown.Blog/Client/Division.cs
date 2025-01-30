@@ -31,7 +31,6 @@ namespace Markdown.Blog.Client
         /// <summary>
         /// Gets the URL for the blog index JSON file.
         /// </summary>
-        /// <param name="version">The version of the index file. Defaults to 0 for the latest version.</param>
         /// <returns>The URL in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/index.json</returns>
         public string GetIndexJsonUrl() =>
             $"{RawUrlBase(true)}{BlogIndexFileNames.Json}";
@@ -39,7 +38,6 @@ namespace Markdown.Blog.Client
         /// <summary>
         /// Gets the URL for the blog index binary file.
         /// </summary>
-        /// <param name="version">The version of the index file. Defaults to 0 for the latest version.</param>
         /// <returns>The URL in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/index.json.gz</returns>
         public string GetIndexBinaryUrl() =>
             $"{RawUrlBase(true)}{BlogIndexFileNames.CompressedJson}";
