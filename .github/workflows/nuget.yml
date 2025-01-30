@@ -51,9 +51,15 @@ jobs:
           echo "Updated csproj content:"
           cat src/Markdown.Blog/Markdown.Blog.csproj
 
-          # Update release notes
-          commit_message=$(git log --no-merges -1 --pretty=%B)
-          sed -i "s|<PackageReleaseNotes>.*</PackageReleaseNotes>|<PackageReleaseNotes>$commit_message</PackageReleaseNotes>|" src/Markdown.Blog/Markdown.Blog.csproj
+          # Get the latest non-merge commit message
+          commit_message=$(git log --no-merges -n 1 --pretty=format:"%s")
+          if [ -z "$commit_message" ]; then
+            commit_message="No significant changes in this release."
+          fi
+
+          # Update release notes, escaping special characters
+          escaped_message=$(echo "$commit_message" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
+          sed -i "s|<PackageReleaseNotes>.*</PackageReleaseNotes>|<PackageReleaseNotes>$escaped_message</PackageReleaseNotes>|" src/Markdown.Blog/Markdown.Blog.csproj
 
       - name: Commit and push changes
         run: |
