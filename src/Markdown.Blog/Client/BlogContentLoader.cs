@@ -12,7 +12,7 @@ namespace Markdown.Blog.Client
 
         public static string ConstructGitHubRawUrl(Division division, string filePath)
         {
-            return $"https://raw.githubusercontent.com/{division.GithubUsername}/{division.GithubRepository}/main/{filePath}";
+            return $"{division.RawUrlBase}{filePath}";
         }
 
         /// <summary>
