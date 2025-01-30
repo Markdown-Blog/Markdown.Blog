@@ -14,21 +14,21 @@ namespace Markdown.Blog.Client
 
 		public static async Task<BlogIndex> GetBlogIndexAsync(Division division)
 		{
-			string url = BlogContentLoader.ConstructGitHubRawUrl(division, BlogIndexFileNames.CompressedJson);
+			string url = BlogContentLoader.ConstructGitHubRawUrl(division, BlogIndexFileNames.CompressedJson, true);
 			var compressedData = await httpClient.GetByteArrayAsync(url);
 			return BlogIndexDeserializer.RestoreBlogIndexFromBinary(compressedData);
 		}
 
 		public static async Task<int> GetBlogIndexVersionAsync(Division division)
 		{
-			string url = BlogContentLoader.ConstructGitHubRawUrl(division, BlogIndexFileNames.Version);
+			string url = BlogContentLoader.ConstructGitHubRawUrl(division, BlogIndexFileNames.Version, true);
 			string versionStr = await httpClient.GetStringAsync(url);
 			return int.TryParse(versionStr, out int version) ? version : 0;
 		}
 
 		public static async Task<string> GetBlogIndexJsonAsync(Division division)
 		{
-			string url = BlogContentLoader.ConstructGitHubRawUrl(division, BlogIndexFileNames.Json);
+			string url = BlogContentLoader.ConstructGitHubRawUrl(division, BlogIndexFileNames.Json, true);
 			return await httpClient.GetStringAsync(url);
 		}
 	}

@@ -26,7 +26,7 @@ namespace Markdown.Blog.Client
         // Gets the base URL for the raw content of the division.
         // The URL is constructed using the GitHub username, repository name, and division name.
         // The URL is in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/
-        public string RawUrlBase => $"https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/";
+        public string RawUrlBase(bool withDivisionName = false) => $"https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{(withDivisionName ? DivisionName + "/" : "")}";
 
         /// <summary>
         /// Gets the URL for the blog index JSON file.
