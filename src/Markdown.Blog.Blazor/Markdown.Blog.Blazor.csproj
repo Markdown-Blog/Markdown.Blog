@@ -36,6 +36,7 @@
 
   <ItemGroup>
 	  <None Include="Resources\logo_128x128.png" Pack="true" PackagePath="\" />
+	  <ProjectReference Include="..\Markdown.Blog\Markdown.Blog.csproj" />
 	  <None Update="Resources\readme.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
