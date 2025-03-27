@@ -16,7 +16,7 @@
 	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	  <Title>Markdown.Blog.Blazor</Title>
 	  <VersionPrefix>0</VersionPrefix>
-	  <Version>$(VersionPrefix).0.3</Version>
+	  <Version>$(VersionPrefix).0.4</Version>
 	  <Authors>zhiliang</Authors>
 	  <Company />
 	  <Description>Blazor components for Markdown.Blog</Description>
@@ -25,7 +25,7 @@
 	  <PackageIcon>logo_128x128.png</PackageIcon>
 	  <RepositoryUrl>https://github.com/Markdown-Blog</RepositoryUrl>
 	  <PackageTags>.net;standard;markdown;blog;blazor;wasm;components</PackageTags>
-	  <PackageReleaseNotes>Test Component 2</PackageReleaseNotes>
+	  <PackageReleaseNotes>Merge branch 'main' of https://github.com/Markdown-Blog/Markdown.Blog</PackageReleaseNotes>
 	  <PackageReadmeFile>Resources\readme.md</PackageReadmeFile>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
