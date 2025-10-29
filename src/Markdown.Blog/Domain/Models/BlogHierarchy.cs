@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace Markdown.Blog.Shared
+namespace Markdown.Blog.Domain.Models
 {
     /// <summary>
     /// Represents the hierarchical structure of a blog post.

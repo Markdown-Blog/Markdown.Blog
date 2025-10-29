@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Markdown.Blog.Shared;
+using Markdown.Blog.Shared.Models;
+using Markdown.Blog.Infrastructure.Utilities;
+using Markdown.Blog.Shared.Constants;
 
 namespace Markdown.Blog.Server
 {
@@ -100,4 +102,4 @@ namespace Markdown.Blog.Server
         public int CompressedSize { get; set; }
         public int Version { get; set; }
     }
-} 
+}

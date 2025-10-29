@@ -2,7 +2,8 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.IO;
-using Markdown.Blog.Shared;
+using Markdown.Blog.Shared.Models;
+using Markdown.Blog.Shared.Constants;
 
 namespace Markdown.Blog.Client
 {

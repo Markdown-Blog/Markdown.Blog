@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Markdown.Blog.Shared;
+using Markdown.Blog.Shared.Models;
 
 namespace Markdown.Blog.Client
 {
@@ -89,4 +89,4 @@ namespace Markdown.Blog.Client
             }
         }
     }
-} 
+}

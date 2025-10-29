@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json;
+using Markdown.Blog.Shared.Models;
 
-namespace Markdown.Blog.Shared
+namespace Markdown.Blog.Infrastructure.Utilities
 {
     /// <summary>
     /// Handles deserialization of blog metadata
@@ -16,7 +17,7 @@ namespace Markdown.Blog.Shared
         {
             try
             {
-                return JsonConvert.DeserializeObject<BlogMetadata>(json) 
+                return JsonSerializer.Deserialize<BlogMetadata>(json) 
                     ?? new BlogMetadata();
             }
             catch (JsonException)
@@ -32,7 +33,7 @@ namespace Markdown.Blog.Shared
         {
             try
             {
-                return JsonConvert.DeserializeObject<List<BlogMetadata>>(json) 
+                return JsonSerializer.Deserialize<List<BlogMetadata>>(json) 
                     ?? new List<BlogMetadata>();
             }
             catch (JsonException)
@@ -42,11 +43,41 @@ namespace Markdown.Blog.Shared
         }
 
         /// <summary>
+        /// Deserializes a JSON string into a generic type
+        /// </summary>
+        public static T? DeserializeFromJson<T>(string json) where T : class
+        {
+            try
+            {
+                return JsonSerializer.Deserialize<T>(json);
+            }
+            catch (JsonException)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Serializes an object to JSON
+        /// </summary>
+        public static string SerializeToJson<T>(T obj)
+        {
+            try
+            {
+                return JsonSerializer.Serialize(obj, new JsonSerializerOptions { WriteIndented = true });
+            }
+            catch (JsonException)
+            {
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
         /// Serializes a BlogMetadata object to JSON
         /// </summary>
         public static string ToJson(BlogMetadata metadata)
         {
-            return JsonConvert.SerializeObject(metadata, Formatting.Indented);
+            return SerializeToJson(metadata);
         }
 
         /// <summary>
@@ -54,7 +85,7 @@ namespace Markdown.Blog.Shared
         /// </summary>
         public static string ToJson(List<BlogMetadata> metadataList)
         {
-            return JsonConvert.SerializeObject(metadataList, Formatting.Indented);
+            return SerializeToJson(metadataList);
         }
     }
-} 
+}

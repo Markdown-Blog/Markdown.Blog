@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace Markdown.Blog.Shared
+namespace Markdown.Blog.Shared.Models
 {
     /// <summary>
     /// Represents metadata for a blog post.
@@ -48,7 +48,12 @@ namespace Markdown.Blog.Shared
         /// For example: ["Documentation", "OutSystems 11", "Building apps", "Data management", "Data operations", "SQL Queries"]
         /// If null, path-based access mode is disabled.
         /// </summary>
-        public List<string> PathSegments { get; set; }
+        public List<string>? PathSegments { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether this blog post is a draft.
+        /// </summary>
+        public bool IsDraft { get; set; }
 
         /// <summary>
         /// Determines if the blog post is displayed in path mode.

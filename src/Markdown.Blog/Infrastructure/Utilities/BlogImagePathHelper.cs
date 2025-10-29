@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Markdown.Blog.Shared
+namespace Markdown.Blog.Infrastructure.Utilities
 {
     /// <summary>
     /// Provides utility methods for handling blog image paths.
@@ -55,4 +55,4 @@ namespace Markdown.Blog.Shared
         /// </summary>
         RelativeToMarkdown
     }
-} 
+}

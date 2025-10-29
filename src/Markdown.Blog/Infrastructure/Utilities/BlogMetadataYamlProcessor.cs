@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
 using System.IO;
+using Markdown.Blog.Shared.Models;
 
-namespace Markdown.Blog.Shared
+namespace Markdown.Blog.Infrastructure.Utilities
 {
     public static class BlogMetadataYamlProcessor
     {

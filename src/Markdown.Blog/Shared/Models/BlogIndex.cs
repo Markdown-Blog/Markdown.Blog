@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace Markdown.Blog.Shared
+namespace Markdown.Blog.Shared.Models
 {
     /// <summary>
     /// Represents an index containing metadata for multiple blog entries.

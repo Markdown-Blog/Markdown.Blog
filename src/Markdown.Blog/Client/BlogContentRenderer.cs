@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
 using Markdig;
-using Markdown.Blog.Shared;
+using Markdown.Blog.Domain.Services;
 using System.Text;
 
 namespace Markdown.Blog.Client
@@ -11,11 +11,22 @@ namespace Markdown.Blog.Client
     /// <summary>
     /// Handles the rendering and processing of blog content for client-side display
     /// </summary>
-    public static class BlogContentRenderer
+    public class BlogContentRenderer
     {
         private static readonly MarkdownPipeline pipeline = new MarkdownPipelineBuilder()
             .UseAdvancedExtensions()
             .Build();
+
+        private readonly IBlogImagePathService _blogImagePathService;
+
+        /// <summary>
+        /// Initializes a new instance of BlogContentRenderer
+        /// </summary>
+        /// <param name="blogImagePathService">Service for constructing blog image paths</param>
+        public BlogContentRenderer(IBlogImagePathService blogImagePathService)
+        {
+            _blogImagePathService = blogImagePathService ?? throw new ArgumentNullException(nameof(blogImagePathService));
+        }
 
         /// <summary>
         /// Converts markdown content to HTML
@@ -31,7 +42,7 @@ namespace Markdown.Blog.Client
         /// <summary>
         /// Converts markdown content to HTML with processed image paths
         /// </summary>
-        public static string RenderContent(BlogData blogData)
+        public string RenderContent(BlogData blogData)
         {
             if (!blogData.IsMdContentLoaded)
                 return string.Empty;
@@ -56,7 +67,7 @@ namespace Markdown.Blog.Client
         /// <summary>
         /// Processes image paths in markdown content to make them absolute
         /// </summary>
-        private static string ProcessImagePaths(string content, BlogData blogData)
+        private string ProcessImagePaths(string content, BlogData blogData)
         {
             // Replace relative image paths with absolute paths
             // Pattern: ![alt](./assets/assetId/filename)
@@ -69,7 +80,7 @@ namespace Markdown.Blog.Client
                     string assetId = match.Groups[2].Value;
                     string filename = match.Groups[3].Value;
 
-                    var absolutePath = BlogImagePathHelper.ConstructImagePath(
+                    var absolutePath = _blogImagePathService.ConstructImagePath(
                         blogData.FilePath,
                         assetId,
                         filename,
@@ -150,4 +161,4 @@ namespace Markdown.Blog.Client
             return Regex.Replace(text.ToLowerInvariant(), @"[^a-z0-9]+", "-").Trim('-');
         }
     }
-} 
+}

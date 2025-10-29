@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Markdown.Blog.Shared;
+using Markdown.Blog.Shared.Models;
 
 namespace Markdown.Blog.Client
 {

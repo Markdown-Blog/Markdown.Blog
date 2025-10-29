@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using System.IO;
-using System.Configuration;
 
-namespace Markdown.Blog.Shared
+namespace Markdown.Blog.Shared.Models
 {
+    /// <summary>
+    /// Represents a blog image in the shared model.
+    /// This is a simple data model without infrastructure dependencies.
+    /// </summary>
     public class BlogImage
     {
         /// <summary>
@@ -21,8 +24,14 @@ namespace Markdown.Blog.Shared
         /// </summary>
         public string ImageFileName { get; }
 
+        /// <summary>
+        /// Image title for display purposes
+        /// </summary>
         public string Title { get; set; }
 
+        /// <summary>
+        /// Alternative text for accessibility
+        /// </summary>
         public string AltText { get; set; }
 
         /// <summary>
@@ -31,6 +40,8 @@ namespace Markdown.Blog.Shared
         /// <param name="mdFilePath">Markdown file path, must end with .md</param>
         /// <param name="assetId">Asset ID for the image folder</param>
         /// <param name="imageFileName">Original image filename</param>
+        /// <param name="title">Optional title for the image</param>
+        /// <param name="altText">Optional alternative text for accessibility</param>
         /// <exception cref="ArgumentException">
         /// Thrown when mdFilePath doesn't end with .md, or
         /// assetId is empty, or
@@ -55,24 +66,5 @@ namespace Markdown.Blog.Shared
             Title = title;
             AltText = altText;
         }
-
-        /// <summary>
-        /// 获取图片的绝对路径
-        /// </summary>
-        /// <returns>完整的图片路径</returns>
-        public string GetAbsolutePath()
-        {
-            return BlogImagePathHelper.ConstructImagePath(MarkdownFilePath, AssetId, ImageFileName, ImagePathType.Absolute);
-        }
-
-        /// <summary>
-        /// 获取相对于 Markdown 文件的图片路径
-        /// </summary>
-        /// <returns>相对路径</returns>
-        public string GetRelativePath()
-        {
-            return BlogImagePathHelper.ConstructImagePath(MarkdownFilePath, AssetId, ImageFileName, ImagePathType.RelativeToMarkdown);
-        }
-
     }
 }

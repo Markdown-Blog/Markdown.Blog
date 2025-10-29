@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Markdown.Blog.Shared;
+using Markdown.Blog.Shared.Models;
 
 namespace Markdown.Blog.Server
 {
@@ -57,4 +57,4 @@ namespace Markdown.Blog.Server
             return blogImages;
         }
     }
-} 
+}

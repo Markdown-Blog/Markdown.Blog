@@ -1,6 +1,6 @@
 using System;
 
-namespace Markdown.Blog.Shared
+namespace Markdown.Blog.Domain.Constants
 {
     /// <summary>
     /// Defines standard file names for blog index files
@@ -22,4 +22,4 @@ namespace Markdown.Blog.Shared
         /// </summary>
         public const string Version = "index.version";
     }
-} 
+}

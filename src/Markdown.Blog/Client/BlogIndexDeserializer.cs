@@ -2,7 +2,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Markdown.Blog.Shared;
+using Markdown.Blog.Shared.Models;
 
 namespace Markdown.Blog.Client
 {
@@ -35,4 +35,4 @@ namespace Markdown.Blog.Client
             }
         }
     }
-} 
+}
