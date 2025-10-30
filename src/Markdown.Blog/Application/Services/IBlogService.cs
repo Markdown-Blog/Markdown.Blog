@@ -1,3 +1,6 @@
+// Services 层说明: Markdown.Blog/src/Markdown.Blog/Application/Services/README.md
+// DTOs 设计文档: Markdown.Blog/src/Markdown.Blog/Application/DTOs/README.md
+// 目的：本服务接口返回标准化 DTOs，供客户端/工具/未来 API 复用。
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
