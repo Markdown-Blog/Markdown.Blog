@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Markdown.Blog.Shared.Models;
+using Markdown.Blog.Domain.Models;
 using Markdown.Blog.Infrastructure.Utilities;
 using Markdown.Blog.Shared.Constants;
 

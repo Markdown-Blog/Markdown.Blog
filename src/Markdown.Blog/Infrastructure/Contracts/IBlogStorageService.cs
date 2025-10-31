@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Markdown.Blog.Shared.Models;
+using Markdown.Blog.Domain.Models;
 
 namespace Markdown.Blog.Infrastructure.Contracts
 {

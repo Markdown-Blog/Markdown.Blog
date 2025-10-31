@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using Markdown.Blog.Shared.Models;
+using Markdown.Blog.Domain.Models;
 using Markdown.Blog.Domain.Services;
 
 namespace Markdown.Blog.Infrastructure.Services

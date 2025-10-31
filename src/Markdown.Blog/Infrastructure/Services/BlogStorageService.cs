@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Markdown.Blog.Shared.Models;
+using Markdown.Blog.Domain.Models;
 using Markdown.Blog.Infrastructure.Contracts;
 using Markdown.Blog.Infrastructure.Utilities;
 

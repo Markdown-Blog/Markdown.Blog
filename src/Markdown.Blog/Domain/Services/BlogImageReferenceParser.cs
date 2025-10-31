@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Markdown.Blog.Shared.Models;
+using Markdown.Blog.Domain.Models;
 
-namespace Markdown.Blog.Server
+namespace Markdown.Blog.Domain.Services
 {
     /// <summary>
-    /// Server-side functionality for extracting and processing blog images from markdown content
+    /// Parses blog image references from Markdown content and produces domain BlogImage models.
+    /// Host-agnostic pure logic, usable by client and server.
     /// </summary>
-    public static class BlogImageExtractor
+    public static class BlogImageReferenceParser
     {
         /// <summary>
         /// Parses all blog image references from Markdown content.
@@ -23,7 +24,7 @@ namespace Markdown.Blog.Server
 
             // Regular expression pattern to match image references in format:
             // ![alt](./assets/{assetId}/{imageFileName} "title")
-            var imagePattern = @"!\[(.*?)\]\(\.\/assets\/([^\/]+)\/([^\/\)\s]+)(?:\s+""([^""]*)"")?\)";
+            var imagePattern = @"!\[(.*?)\]\(\./assets/([^/]+)/([^/\)\s]+)(?:\s+""([^""]*)"")?\)";
             var matches = Regex.Matches(markdownContent, imagePattern);
 
             foreach (Match match in matches)

@@ -2,7 +2,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Markdown.Blog.Shared.Models;
+using Markdown.Blog.Domain.Models;
 
 namespace Markdown.Blog.Client
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using Markdown.Blog.Shared.Models;
+using Markdown.Blog.Domain.Models;
 
 namespace Markdown.Blog.Infrastructure.Utilities
 {

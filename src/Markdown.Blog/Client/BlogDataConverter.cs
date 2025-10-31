@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Markdown.Blog.Shared.Models;
+using Markdown.Blog.Domain.Models;
 using Markdown.Blog.Shared.Constants;
 
 namespace Markdown.Blog.Client

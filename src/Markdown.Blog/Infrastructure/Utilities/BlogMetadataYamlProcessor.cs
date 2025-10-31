@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
 using System.IO;
-using Markdown.Blog.Shared.Models;
+using Markdown.Blog.Domain.Models;
 
 namespace Markdown.Blog.Infrastructure.Utilities
 {
