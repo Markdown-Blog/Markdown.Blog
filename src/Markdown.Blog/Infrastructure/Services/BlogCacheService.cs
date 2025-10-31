@@ -605,6 +605,7 @@ namespace Markdown.Blog.Infrastructure.Services
             }
         }
 
+
         private async Task<BlogCacheDocument> LoadCacheDocumentAsync(string key)
         {
             try
