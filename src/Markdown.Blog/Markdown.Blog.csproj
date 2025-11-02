@@ -14,8 +14,8 @@
 		<ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>Markdown.Blog</Title>
-		<VersionPrefix>0</VersionPrefix>
-		<Version>$(VersionPrefix).1.12</Version>
+		<VersionPrefix>1</VersionPrefix>
+		<Version>$(VersionPrefix).1.0</Version>
 		<Authors>zhiliang</Authors>
 		<Company />
 		<Description>Markdown.Blog: A convenient and flexible .NET-based reusable component for generating blogs using Markdown.</Description>
