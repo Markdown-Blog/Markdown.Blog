@@ -15,7 +15,7 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>Markdown.Blog</Title>
 		<VersionPrefix>1</VersionPrefix>
-		<Version>$(VersionPrefix).1.1</Version>
+		<Version>$(VersionPrefix).1.2</Version>
 		<Authors>zhiliang</Authors>
 		<Company />
 		<Description>Markdown.Blog: A convenient and flexible .NET-based reusable component for generating blogs using Markdown.</Description>
@@ -24,7 +24,7 @@
 		<PackageIcon>logo_128x128.png</PackageIcon>
 		<RepositoryUrl>https://github.com/Markdown-Blog</RepositoryUrl>
 		<PackageTags>.net;standard;markdown;blog</PackageTags>
-		<PackageReleaseNotes>refactor(blog-index): 重构博客索引生成和存储逻辑（version 1.x）</PackageReleaseNotes>
+		<PackageReleaseNotes>feat(存储): 添加博客索引变更集功能</PackageReleaseNotes>
 		<PackageReadmeFile>Resources\readme.md</PackageReadmeFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
