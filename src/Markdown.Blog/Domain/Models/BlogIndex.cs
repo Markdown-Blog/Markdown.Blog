@@ -14,6 +14,12 @@ namespace Markdown.Blog.Domain.Models
         /// Increments when any blog post is modified, serving as a version identifier.
         /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the division this index belongs to.
+        /// </summary>
+        public Division Division { get; set; }
+
         /// <summary>
         /// Gets or sets the timestamp when this index was generated in UTC.
         /// Typically reflects the most recent modification time of any blog post in the system.
@@ -24,5 +30,17 @@ namespace Markdown.Blog.Domain.Models
         /// Contains information such as titles, descriptions, and other metadata for all blog entries in this index.
         /// </summary>
         public List<BlogMetadata> BlogMetadataList { get; set; }
+
+        public BlogIndex()
+        {
+        }
+
+        public BlogIndex(Division division, int id, List<BlogMetadata> blogMetadataList)
+        {
+            Division = division;
+            Id = id;
+            BlogMetadataList = blogMetadataList;
+            DateTime = DateTime.UtcNow;
+        }
     }
 }
