@@ -5,9 +5,10 @@ namespace Markdown.Blog.Infrastructure.Storage
     /// </summary>
     public static class BlogIndexFileNames
     {
-        public const string Json = "index.json";
+		public const string MetaDataDirectory = ".markdown.blog";
+		public const string Json = "index.json";
         public const string CompressedJson = "index.json.gz";
         public const string Version = "index.version";
         public const string Diff = "index.{0}.diff.json";
-    }
+	}
 }
