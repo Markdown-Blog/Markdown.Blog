@@ -2,8 +2,10 @@ namespace Markdown.Blog.Domain.Models
 {
     public class Repository
     {
-        public string Owner { get; set; }
-        public string Repo { get; set; }
+        public string Owner { get; set; } = default!;
+        public string Repo { get; set; } = default!;
+
+		public Repository() { }
 
         public Repository(string owner, string repo)
         {

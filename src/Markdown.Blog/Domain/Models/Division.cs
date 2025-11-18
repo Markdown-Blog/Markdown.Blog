@@ -1,14 +1,16 @@
 namespace Markdown.Blog.Domain.Models
 {
-    public class Division
-    {
-        public Repository Repository { get; set; }
-        public string Name { get; set; }
+	public class Division
+	{
+		public Repository Repository { get; set; } = default!;
+		public string Name { get; set; } = default!;
 
-        public Division(Repository repository, string name)
-        {
-            Repository = repository;
-            Name = name;
-        }
-    }
+		public Division() { }
+
+		public Division(Repository repository, string name)
+		{
+			Repository = repository;
+			Name = name;
+		}
+	}
 }
