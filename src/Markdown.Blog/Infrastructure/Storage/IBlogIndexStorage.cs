@@ -1,3 +1,4 @@
+using Markdown.Blog.Domain.Models;
 using System.Threading.Tasks;
 
 namespace Markdown.Blog.Infrastructure.Storage
@@ -15,7 +16,7 @@ namespace Markdown.Blog.Infrastructure.Storage
         /// <summary>
         /// Persist index JSON and compressed bytes with the provided version.
         /// </summary>
-        Task SaveIndexAsync(string divisionDirectory, string json, byte[] binary, int newVersion);
+        Task SaveIndexAsync(string divisionDirectory, BlogIndex blogIndex, int newVersion);
 
         /// <summary>
         /// Try to get the full blog index. Returns a success flag and the index if found.
@@ -25,7 +26,7 @@ namespace Markdown.Blog.Infrastructure.Storage
         /// <summary>
         /// Save a changeset to a versioned diff file.
         /// </summary>
-        Task SaveBlogIndexChangesetAsync(string divisionDirectory, string json, byte[] compressed);
+        Task SaveBlogIndexChangesetAsync(string divisionDirectory, BlogIndexChangeset changeset);
 
         /// <summary>
         /// Keep the latest N changesets and delete the rest.
