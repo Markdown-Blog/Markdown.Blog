@@ -30,8 +30,8 @@ namespace Markdown.Blog.Infrastructure.Storage
 			var metaDataDir = Path.Combine(divisionDirectory, MetaDataDirectory);
 			Directory.CreateDirectory(metaDataDir);
 
-			var jsonFile = Path.Combine(metaDataDir, BlogIndexFileNames.Json);
-			var gzipFile = Path.Combine(metaDataDir, BlogIndexFileNames.CompressedJson);
+			var jsonFile = Path.Combine(metaDataDir, BlogIndexFileNames.Full);
+			var gzipFile = Path.Combine(metaDataDir, BlogIndexFileNames.FullCompressed);
 			var versionFile = Path.Combine(metaDataDir, BlogIndexFileNames.Version);
 
 			await File.WriteAllTextAsync(jsonFile, json, Encoding.UTF8);
@@ -41,7 +41,7 @@ namespace Markdown.Blog.Infrastructure.Storage
 
 		public async Task<(bool Success, BlogIndex? BlogIndex)> TryGetBlogIndexAsync(string divisionDirectory)
 		{
-			var jsonFile = Path.Combine(divisionDirectory, MetaDataDirectory, BlogIndexFileNames.Json);
+			var jsonFile = Path.Combine(divisionDirectory, MetaDataDirectory, BlogIndexFileNames.Full);
 			if (!File.Exists(jsonFile))
 				return (false, null);
 
@@ -50,12 +50,16 @@ namespace Markdown.Blog.Infrastructure.Storage
 			return (true, blogIndex);
 		}
 
-		public async Task SaveBlogIndexChangesetAsync(string divisionDirectory, BlogIndexChangeset changeset)
-		{
-			var diffFile = Path.Combine(divisionDirectory, MetaDataDirectory, string.Format(BlogIndexFileNames.Diff, changeset.ToVersion));
-			var json = JsonConvert.SerializeObject(changeset, Formatting.None);
-			await File.WriteAllTextAsync(diffFile, json, Encoding.UTF8);
-		}
+        public async Task SaveBlogIndexChangesetAsync(string divisionDirectory, BlogIndexChangeset changeset, byte[] compressed)
+        {
+            var metaDataDir = Path.Combine(divisionDirectory, MetaDataDirectory);
+            var diffFile = Path.Combine(metaDataDir, string.Format(BlogIndexFileNames.Diff, changeset.ToVersion));
+            var compressedDiffFile = Path.Combine(metaDataDir, string.Format(BlogIndexFileNames.DiffCompressed, changeset.ToVersion));
+
+            var json = JsonConvert.SerializeObject(changeset, Formatting.None);
+            await File.WriteAllTextAsync(diffFile, json, Encoding.UTF8);
+            await File.WriteAllBytesAsync(compressedDiffFile, compressed);
+        }
 
 		public Task CleanUpOldChangesetsAsync(string divisionDirectory, int keepCount)
 		{
@@ -75,6 +79,13 @@ namespace Markdown.Blog.Infrastructure.Storage
 				try
 				{
 					fileToDelete.File.Delete();
+
+                    var compressedFileName = string.Format(BlogIndexFileNames.DiffCompressed, fileToDelete.Version);
+                    var compressedFilePath = Path.Combine(metaDataDir, compressedFileName);
+                    if (File.Exists(compressedFilePath))
+                    {
+                        File.Delete(compressedFilePath);
+                    }
 				}
 				catch (IOException ex)
 				{
