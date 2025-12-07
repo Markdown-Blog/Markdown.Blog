@@ -25,7 +25,7 @@ namespace Markdown.Blog.Infrastructure.Storage
         /// <summary>
         /// Save a changeset to a versioned diff file.
         /// </summary>
-        Task SaveBlogIndexChangesetAsync(string divisionDirectory, Domain.Models.BlogIndexChangeset changeset, byte[] compressed);
+        Task SaveBlogIndexChangesetAsync(string divisionDirectory, string json, byte[] compressed);
 
         /// <summary>
         /// Keep the latest N changesets and delete the rest.
