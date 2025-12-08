@@ -15,7 +15,7 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>Markdown.Blog</Title>
 		<VersionPrefix>1</VersionPrefix>
-		<Version>$(VersionPrefix).1.10</Version>
+		<Version>$(VersionPrefix).1.11</Version>
 		<Authors>zhiliang</Authors>
 		<Company />
 		<Description>Markdown.Blog: A convenient and flexible .NET-based reusable component for generating blogs using Markdown.</Description>
@@ -24,7 +24,7 @@
 		<PackageIcon>logo_128x128.png</PackageIcon>
 		<RepositoryUrl>https://github.com/Markdown-Blog</RepositoryUrl>
 		<PackageTags>.net;standard;markdown;blog</PackageTags>
-		<PackageReleaseNotes>feat(配置): 添加内容分发配置支持并重构原始URL生成逻辑</PackageReleaseNotes>
+		<PackageReleaseNotes>refactor(Client): 将BlogConfiguration类移动到Configuration命名空间</PackageReleaseNotes>
 		<PackageReadmeFile>Resources\readme.md</PackageReadmeFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
