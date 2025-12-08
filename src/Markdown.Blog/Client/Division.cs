@@ -4,6 +4,7 @@ using System.Text;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Markdown.Blog.Shared.Constants;
+using Markdown.Blog.Client.Configuration;
 
 namespace Markdown.Blog.Client
 {
@@ -19,26 +20,40 @@ namespace Markdown.Blog.Client
         // Gets or sets the name of the division.
         public string DivisionName { get; set; }
 
+        // Configuration for content delivery (e.g., CDN).
+        public ContentDeliveryConfiguration ContentDelivery { get; set; }
 
         // Gets the path for the division, which is the same as DivisionName
         public string Path => DivisionName;
 
         // Gets the base URL for the raw content of the division.
-        // The URL is constructed using the GitHub username, repository name, and division name.
-        // The URL is in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/
-        public string RawUrlBase(bool withDivisionName = false) => $"https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{(withDivisionName ? DivisionName + "/" : "")}";
+        // If ContentDelivery is configured with Cloudflare, uses the custom domain.
+        // Otherwise, falls back to the GitHub raw URL.
+        public string RawUrlBase(bool withDivisionName = false)
+        {
+            if (ContentDelivery != null && 
+                "Cloudflare".Equals(ContentDelivery.Provider, StringComparison.OrdinalIgnoreCase) && 
+                !string.IsNullOrEmpty(ContentDelivery.Domain))
+            {
+                var protocol = ContentDelivery.Domain.StartsWith("http") ? "" : "https://";
+                var baseUrl = $"{protocol}{ContentDelivery.Domain}/{(withDivisionName ? DivisionName + "/" : "")}";
+                return baseUrl;
+            }
+
+            return $"https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{(withDivisionName ? DivisionName + "/" : "")}";
+        }
 
         /// <summary>
         /// Gets the URL for the blog index JSON file.
         /// </summary>
-        /// <returns>The URL in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/index.json</returns>
+        /// <returns>The URL in the format: https://{Domain}/{DivisionName}/index.json or GitHub Raw URL</returns>
         public string GetIndexJsonUrl() =>
             $"{RawUrlBase(true)}{BlogIndexFileNames.Json}";
 
         /// <summary>
         /// Gets the URL for the blog index binary file.
         /// </summary>
-        /// <returns>The URL in the format: https://raw.githubusercontent.com/{GithubUsername}/{GithubRepository}/refs/heads/main/{DivisionName}/index.json.gz</returns>
+        /// <returns>The URL in the format: https://{Domain}/{DivisionName}/index.json.gz or GitHub Raw URL</returns>
         public string GetIndexBinaryUrl() =>
             $"{RawUrlBase(true)}{BlogIndexFileNames.CompressedJson}";
 
